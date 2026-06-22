@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<link rel="manifest" href="manifest.json"/>
+<meta charset="UTF-8"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0D0D12"/>
+<meta name="description" content="ShortSpark — Food & Cooking Shorts Ideation Workspace"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="ShortSpark"/>
+<title>ShortSpark — Food Shorts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        base: '#0D0D12',
+        surface: '#16161F',
+        elevated: '#1E1E2E',
+        bdr: '#2A2A3D',
+        violet: { DEFAULT: '#8B5CF6', light: '#A78BFA', dark: '#7C3AED' },
+        pink: { DEFAULT: '#EC4899', light: '#F472B6' },
+        amber: { DEFAULT: '#F59E0B', light: '#FCD34D' },
+        orange: { DEFAULT: '#F97316', light: '#FB923C' },
+      },
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+    }
+  }
+}
+</script>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin:0; padding:0; background:#0D0D12; color:#E2E8F0; font-family:'Inter',system-ui,sans-serif; min-height:100%; overscroll-behavior:none; }
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#2A2A3D; border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:#8B5CF6; }
+
+/* Panels */
+.panel { display:none; }
+.panel.active { display:block; animation:slideUp .32s cubic-bezier(.22,1,.36,1) forwards; }
+
+/* Nav */
+.tab-btn { transition:color .15s; }
+.tab-active .tab-icon { color:#A78BFA !important; filter:drop-shadow(0 0 5px #8B5CF6); }
+.tab-active .tab-label { color:#A78BFA !important; }
+.tab-active .tab-pip { opacity:1 !important; }
+
+/* Buttons */
+.btn-primary { background:linear-gradient(135deg,#8B5CF6,#7C3AED); color:#fff; border:none; cursor:pointer; font-weight:600; transition:all .18s; }
+.btn-primary:hover { background:linear-gradient(135deg,#A78BFA,#8B5CF6); box-shadow:0 0 22px #8B5CF640; transform:translateY(-1px); }
+.btn-primary:active { transform:translateY(0); box-shadow:none; }
+.btn-orange { background:linear-gradient(135deg,#F97316,#EA580C); color:#fff; border:none; cursor:pointer; font-weight:700; transition:all .18s; }
+.btn-orange:hover { background:linear-gradient(135deg,#FB923C,#F97316); box-shadow:0 0 22px #F9731640; transform:translateY(-1px); }
+.btn-orange:active { transform:translateY(0); }
+.btn-secondary { background:#1E1E2E; color:#A78BFA; border:1px solid #2A2A3D; cursor:pointer; font-weight:500; transition:all .18s; }
+.btn-secondary:hover { border-color:#8B5CF6; background:#8B5CF610; }
+.btn-ghost { background:transparent; color:#94A3B8; border:1px solid #2A2A3D; cursor:pointer; transition:all .18s; }
+.btn-ghost:hover { color:#E2E8F0; border-color:#3A3A5A; background:#ffffff08; }
+.btn-danger { background:#EF444415; color:#EF4444; border:1px solid #EF444430; cursor:pointer; transition:all .18s; }
+.btn-danger:hover { background:#EF444425; }
+
+/* Inputs */
+.input-field { background:#1E1E2E; border:1px solid #2A2A3D; color:#E2E8F0; transition:border-color .18s,box-shadow .18s; outline:none; }
+.input-field:focus { border-color:#8B5CF6; box-shadow:0 0 0 3px #8B5CF612; }
+.input-field::placeholder { color:#3A3A5A; }
+select option { background:#1E1E2E; }
+
+/* Cards */
+.card { background:#16161F; border:1px solid #2A2A3D; border-radius:14px; }
+.hook-card { background:linear-gradient(140deg,#16161F,#1A1A2A); border:1px solid #2A2A3D; border-radius:14px; transition:border-color .2s,box-shadow .2s; }
+.hook-card:hover { border-color:#8B5CF650; box-shadow:0 4px 28px #8B5CF618; }
+.food-card { background:linear-gradient(140deg,#1A1510,#1C1612); border:1px solid #3A2E1E; border-radius:14px; transition:all .2s; }
+.food-card:hover { border-color:#F9731650; box-shadow:0 4px 28px #F9731618; }
+
+/* Badges */
+.badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:600; white-space:nowrap; }
+.badge-violet { background:#8B5CF620; color:#A78BFA; border:1px solid #8B5CF640; }
+.badge-pink { background:#EC489920; color:#F472B6; border:1px solid #EC489940; }
+.badge-green { background:#10B98120; color:#34D399; border:1px solid #10B98140; }
+.badge-amber { background:#F59E0B20; color:#FCD34D; border:1px solid #F59E0B40; }
+.badge-orange { background:#F9731620; color:#FB923C; border:1px solid #F9731640; }
+.badge-red { background:#EF444420; color:#FCA5A5; border:1px solid #EF444440; }
+
+/* Shimmer */
+.shimmer { background:linear-gradient(90deg,#1E1E2E 0%,#2A2A3D 50%,#1E1E2E 100%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* Animations */
+@keyframes slideUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes orbFloat { 0%,100%{transform:scale(1) translate(0,0);opacity:.16} 50%{transform:scale(1.12) translate(6px,-6px);opacity:.26} }
+@keyframes warnPulse { 0%,100%{background:#1E1E2E} 50%{background:#EF444422} }
+@keyframes diceSpin { 0%{transform:rotate(0deg) scale(1)} 25%{transform:rotate(90deg) scale(1.15)} 50%{transform:rotate(180deg) scale(0.9)} 75%{transform:rotate(270deg) scale(1.15)} 100%{transform:rotate(360deg) scale(1)} }
+@keyframes diceResult { 0%{transform:scale(0.7) rotate(-8deg);opacity:0} 60%{transform:scale(1.08) rotate(2deg);opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+@keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
+@keyframes slideRight { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+
+.orb { animation:orbFloat 7s ease-in-out infinite; }
+.orb2 { animation:orbFloat 9s ease-in-out infinite reverse; }
+.warning-pulse { animation:warnPulse 1s ease-in-out 3; }
+.dice-spinning { animation:diceSpin .5s ease-in-out; }
+.dice-result-anim { animation:diceResult .4s cubic-bezier(.22,1,.36,1) forwards; }
+.sparkle-dot { animation:sparkle .6s ease forwards; }
+
+/* Progress bar */
+.prog-bar { height:4px; border-radius:4px; background:#2A2A3D; overflow:hidden; }
+.prog-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,#8B5CF6,#EC4899); transition:width .4s ease; }
+
+/* Shot rows */
+.shot-row-visual { background:#8B5CF610; border-left:3px solid #8B5CF6; }
+.shot-row-audio { background:#EC489910; border-left:3px solid #EC4899; }
+
+/* Modal */
+.modal-backdrop { position:fixed; inset:0; background:#00000092; z-index:1000; display:flex; align-items:flex-end; justify-content:center; animation:fadeIn .2s ease; }
+@media(min-width:640px){.modal-backdrop{align-items:center;}}
+.modal-sheet { background:#16161F; border:1px solid #2A2A3D; border-radius:20px 20px 0 0; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; animation:slideUp .3s cubic-bezier(.22,1,.36,1); }
+@media(min-width:640px){.modal-sheet{border-radius:16px;}}
+
+/* Toast */
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#1A1A28; border:1px solid #2A2A3D; color:#E2E8F0; padding:10px 18px; border-radius:10px; font-size:13px; font-weight:500; z-index:9999; animation:fadeIn .2s ease; box-shadow:0 8px 32px #00000070; white-space:nowrap; pointer-events:none; }
+
+/* Dice face */
+.dice-face { width:72px; height:72px; background:linear-gradient(135deg,#1E1E2E,#16161F); border:2px solid #3A3A5A; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:32px; cursor:pointer; transition:all .2s; user-select:none; box-shadow:0 4px 16px #00000040; }
+.dice-face:hover { border-color:#F97316; box-shadow:0 0 20px #F9731630; transform:translateY(-2px); }
+.dice-face:active { transform:scale(0.93); }
+
+/* Dice category pills */
+.cat-pill { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid #2A2A3D; background:#1E1E2E; color:#64748B; transition:all .18s; }
+.cat-pill.active { background:#F9731620; color:#FB923C; border-color:#F9731650; }
+.cat-pill:hover:not(.active) { border-color:#3A3A5A; color:#94A3B8; }
+
+/* Lib item */
+.lib-item { background:#16161F; border:1px solid #2A2A3D; border-radius:12px; transition:border-color .18s; }
+.lib-item:hover { border-color:#8B5CF640; }
+
+/* Desktop */
+.desktop-sidebar { display:none; }
+@media(min-width:900px){
+  .desktop-sidebar { display:flex; flex-direction:column; width:230px; min-width:230px; border-right:1px solid #1E1E2E; position:sticky; top:0; height:100vh; overflow-y:auto; }
+  .mobile-nav { display:none !important; }
+  .main-content { padding-bottom:0 !important; }
+}
+
+/* Gradient text */
+.grad-text { background:linear-gradient(135deg,#F97316,#EC4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.grad-text-v { background:linear-gradient(135deg,#8B5CF6,#EC4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Dice result card */
+.dice-result-card { background:linear-gradient(140deg,#1C1510,#201A10); border:1px solid #F9731630; border-radius:16px; }
+
+/* Filter chips */
+.filter-chip { padding:5px 12px; border-radius:20px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid #2A2A3D; background:transparent; color:#64748B; transition:all .15s; }
+.filter-chip.on { background:#8B5CF620; color:#A78BFA; border-color:#8B5CF640; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- BG Orbs -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+  <div class="orb absolute rounded-full" style="width:380px;height:380px;top:-80px;left:-60px;background:radial-gradient(circle,#8B5CF625 0%,transparent 70%);"></div>
+  <div class="orb2 absolute rounded-full" style="width:320px;height:320px;bottom:20%;right:-50px;background:radial-gradient(circle,#F9731620 0%,transparent 70%);"></div>
+  <div class="orb absolute rounded-full" style="width:200px;height:200px;top:40%;left:30%;background:radial-gradient(circle,#EC489912 0%,transparent 70%);animation-duration:11s;"></div>
+</div>
+
+<div class="relative z-10 flex min-h-screen">
+
+  <!-- Desktop Sidebar -->
+  <aside class="desktop-sidebar flex-col py-6 px-4 gap-1" style="background:#0A0A12;border-right:1px solid #1A1A28;">
+    <div class="flex items-center gap-2.5 mb-8 px-2">
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#F97316,#EC4899);">🍳</div>
+      <div>
+        <div class="font-black text-white text-base leading-none">ShortSpark</div>
+        <div class="text-xs text-slate-600 font-medium">Food Edition</div>
+      </div>
+    </div>
+    <button onclick="switchTab('dice')" id="desk-tab-dice" class="desk-tab flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-white hover:bg-white/5 transition-all w-full text-left">
+      <span class="text-base">🎲</span> Dice Roll Ideas
+    </button>
+    <button onclick="switchTab('generate')" id="desk-tab-generate" class="desk-tab flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-white hover:bg-white/5 transition-all w-full text-left">
+      <i class="fa-solid fa-wand-magic-sparkles w-4"></i> Hook Generator
+    </button>
+    <button onclick="switchTab('script')" id="desk-tab-script" class="desk-tab flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-white hover:bg-white/5 transition-all w-full text-left">
+      <i class="fa-solid fa-scroll w-4"></i> Script Studio
+    </button>
+    <button onclick="switchTab('library')" id="desk-tab-library" class="desk-tab flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-white hover:bg-white/5 transition-all w-full text-left">
+      <i class="fa-solid fa-layer-group w-4"></i> Library
+    </button>
+    <div class="mt-auto pt-4 border-t border-slate-800">
+      <button onclick="openSettings()" class="desk-tab flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-500 hover:text-white hover:bg-white/5 transition-all w-full text-left">
+        <i class="fa-solid fa-gear w-4"></i> Settings
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="flex flex-col flex-1 min-w-0">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 flex items-center justify-between px-4 py-3" style="background:#0D0D12DD;backdrop-filter:blur(14px);border-bottom:1px solid #1A1A28;">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center text-base sm:hidden" style="background:linear-gradient(135deg,#F97316,#EC4899);">🍳</div>
+        <div>
+          <div class="font-black text-white text-sm leading-tight">ShortSpark <span class="grad-text font-black">Food</span></div>
+          <div class="text-xs text-slate-600 hidden sm:block">Cooking & Food Shorts Workspace</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div id="api-badge" class="badge badge-green hidden"><i class="fa-solid fa-circle-check mr-1 text-xs"></i>AI On</div>
+        <button onclick="openSettings()" class="w-8 h-8 flex items-center justify-center btn-ghost rounded-xl text-xs">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Panels -->
+    <main class="flex-1 overflow-y-auto main-content" style="padding-bottom:76px;">
+
+      <!-- ═══════════════════════════════════════
+           DICE ROLL PANEL
+      ═══════════════════════════════════════ -->
+      <div id="panel-dice" class="panel active px-4 pt-5 pb-8 max-w-2xl mx-auto w-full">
+
+        <!-- Hero -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center gap-2 badge badge-orange mb-3">
+            <i class="fa-solid fa-dice text-xs"></i> Random Food Idea Generator
+          </div>
+          <h1 class="text-2xl font-black text-white mb-1">Roll for Your Next <span class="grad-text">Food Short</span></h1>
+          <p class="text-sm text-slate-400">Tap the dice to get a random cooking video idea. Instant inspiration, zero overthinking.</p>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="flex flex-wrap gap-2 justify-center mb-5">
+          <button class="cat-pill active" data-cat="all" onclick="setCat(this,'all')">🍽 All</button>
+          <button class="cat-pill" data-cat="recipes" onclick="setCat(this,'recipes')">📖 Recipes</button>
+          <button class="cat-pill" data-cat="hacks" onclick="setCat(this,'hacks')">⚡ Hacks</button>
+          <button class="cat-pill" data-cat="challenges" onclick="setCat(this,'challenges')">🏆 Challenges</button>
+          <button class="cat-pill" data-cat="reviews" onclick="setCat(this,'reviews')">⭐ Reviews</button>
+          <button class="cat-pill" data-cat="budget" onclick="setCat(this,'budget')">💸 Budget</button>
+          <button class="cat-pill" data-cat="global" onclick="setCat(this,'global')">🌍 World Cuisines</button>
+        </div>
+
+        <!-- DICE -->
+        <div class="flex flex-col items-center mb-6">
+          <div id="dice-el" class="dice-face mb-3 select-none" onclick="rollDice()" title="Click to roll!">🎲</div>
+          <button onclick="rollDice()" class="btn-orange px-8 py-3 rounded-2xl text-sm flex items-center gap-2.5">
+            <i class="fa-solid fa-dice"></i> Roll the Dice
+          </button>
+          <p class="text-xs text-slate-600 mt-2">or tap the dice above</p>
+        </div>
+
+        <!-- Result -->
+        <div id="dice-result" class="hidden mb-5">
+          <div id="dice-result-card" class="dice-result-card p-5">
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div class="flex flex-wrap gap-2" id="result-badges"></div>
+              <button onclick="rollDice()" class="btn-ghost px-2.5 py-1 rounded-lg text-xs flex items-center gap-1 shrink-0">
+                <i class="fa-solid fa-arrows-rotate text-xs"></i> Reroll
+              </button>
+            </div>
+            <h2 id="result-title" class="text-lg font-black text-white mb-2 leading-snug"></h2>
+            <p id="result-hook" class="text-sm text-amber-200 italic mb-3 leading-relaxed" style="color:#FDE68A;"></p>
+            <p id="result-desc" class="text-sm text-slate-400 leading-relaxed mb-4"></p>
+
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div class="rounded-xl p-3" style="background:#ffffff06;border:1px solid #2A2A3D;">
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">⏱ Pacing</div>
+                <div id="result-pacing" class="text-sm text-slate-300 font-medium"></div>
+              </div>
+              <div class="rounded-xl p-3" style="background:#ffffff06;border:1px solid #2A2A3D;">
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">🎬 Format</div>
+                <div id="result-format" class="text-sm text-slate-300 font-medium"></div>
+              </div>
+              <div class="rounded-xl p-3" style="background:#ffffff06;border:1px solid #2A2A3D;">
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">📱 Hook Style</div>
+                <div id="result-hookstyle" class="text-sm text-slate-300 font-medium"></div>
+              </div>
+              <div class="rounded-xl p-3" style="background:#ffffff06;border:1px solid #2A2A3D;">
+                <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">🔥 Viral Score</div>
+                <div id="result-viral" class="text-sm font-bold"></div>
+              </div>
+            </div>
+
+            <div class="rounded-xl p-3 mb-4" style="background:#F9731610;border:1px solid #F9731630;">
+              <div class="text-xs font-semibold mb-1.5" style="color:#FB923C;">🎯 Opening Shot Idea</div>
+              <p id="result-opening" class="text-sm text-slate-300 leading-relaxed"></p>
+            </div>
+
+            <div class="flex gap-2 flex-wrap">
+              <button onclick="saveDiceIdea()" class="btn-orange px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+                <i class="fa-solid fa-bookmark"></i> Save Idea
+              </button>
+              <button onclick="sendDiceToGenerator()" class="btn-secondary px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Expand Hooks
+              </button>
+              <button onclick="sendDiceToScript()" class="btn-secondary px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+                <i class="fa-solid fa-scroll"></i> Write Script
+              </button>
+              <button onclick="copyDiceIdea()" class="btn-ghost px-3 py-2 rounded-xl text-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trending Food Content Sections -->
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-bold text-slate-300">🔥 Trending Food Short Formats</h2>
+          </div>
+          <div class="space-y-2">
+            <div class="food-card p-3 flex items-center gap-3 cursor-pointer" onclick="useQuickIdea(this)" data-idea="I made 5 viral TikTok food recipes and rated them honestly">
+              <span class="text-2xl">📊</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-white">Viral Recipe Tier List</div>
+                <div class="text-xs text-slate-500">Rate internet recipes honestly — high engagement</div>
+              </div>
+              <span class="badge badge-amber">Hot</span>
+            </div>
+            <div class="food-card p-3 flex items-center gap-3 cursor-pointer" onclick="useQuickIdea(this)" data-idea="Cooking a full meal using only ingredients from the dollar store">
+              <span class="text-2xl">💰</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-white">Dollar Store Full Meal</div>
+                <div class="text-xs text-slate-500">Budget cooking challenge — massive relatability</div>
+              </div>
+              <span class="badge badge-green">Trending</span>
+            </div>
+            <div class="food-card p-3 flex items-center gap-3 cursor-pointer" onclick="useQuickIdea(this)" data-idea="Cooking the same dish 3 ways: $5 vs $25 vs $100 budget">
+              <span class="text-2xl">⚖️</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-white">Budget Comparison Cook-off</div>
+                <div class="text-xs text-slate-500">$5 / $25 / $100 same dish — always viral</div>
+              </div>
+              <span class="badge badge-orange">Classic</span>
+            </div>
+            <div class="food-card p-3 flex items-center gap-3 cursor-pointer" onclick="useQuickIdea(this)" data-idea="Fixing the most common cooking mistakes beginners make">
+              <span class="text-2xl">🔧</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-white">Fix Beginner Cooking Mistakes</div>
+                <div class="text-xs text-slate-500">Educational + saves people — great retention</div>
+              </div>
+              <span class="badge badge-violet">Evergreen</span>
+            </div>
+            <div class="food-card p-3 flex items-center gap-3 cursor-pointer" onclick="useQuickIdea(this)" data-idea="Foods from around the world I tried for the first time reaction">
+              <span class="text-2xl">🌍</span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-semibold text-white">Global Food First Reactions</div>
+                <div class="text-xs text-slate-500">Cultural food discovery — very shareable</div>
+              </div>
+              <span class="badge badge-pink">Viral</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           HOOK GENERATOR PANEL
+      ═══════════════════════════════════════ -->
+      <div id="panel-generate" class="panel px-4 pt-5 pb-8 max-w-2xl mx-auto w-full">
+        <div class="mb-5">
+          <h1 class="text-xl font-black text-white mb-1">Hook Generator</h1>
+          <p class="text-sm text-slate-400">Turn any food idea into 3 scroll-stopping hook variations.</p>
+        </div>
+
+        <div class="card p-4 mb-4">
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Your Food Topic / Dish</label>
+            <input id="niche-input" type="text" placeholder="e.g. homemade ramen, crispy chicken, budget pasta..." class="input-field w-full px-3 py-2.5 rounded-xl text-sm"/>
+          </div>
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Food Short Format</label>
+            <select id="format-select" class="input-field w-full px-3 py-2.5 rounded-xl text-sm appearance-none cursor-pointer">
+              <option value="auto">✨ Auto-Select Best Format</option>
+              <option value="cheap-vs-expensive">💸 Cheap vs Expensive Ingredients</option>
+              <option value="market-vs-homemade">🏠 Takeout vs Homemade</option>
+              <option value="mythbusting">💥 Cooking Myth Busted</option>
+              <option value="30-second-challenge">⏱ 60-Second Recipe Challenge</option>
+              <option value="before-after">🔄 Disaster to Delicious</option>
+              <option value="rookie-vs-pro">🎯 Home Cook vs Chef</option>
+              <option value="top3-secrets">🔐 Secrets Pro Chefs Don't Tell You</option>
+              <option value="tutorial-speedrun">⚡ Recipe Speedrun</option>
+              <option value="hot-take">🔥 Controversial Food Opinion</option>
+              <option value="taste-test">😋 Blind Taste Test</option>
+              <option value="food-hack">🧠 Game-Changing Food Hack</option>
+              <option value="asmr-cook">🎙 ASMR Cooking POV</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Your Audience (optional)</label>
+            <input id="audience-input" type="text" placeholder="e.g. college students, busy parents, beginner cooks..." class="input-field w-full px-3 py-2.5 rounded-xl text-sm"/>
+          </div>
+          <button id="generate-btn" onclick="generateIdeas()" class="btn-primary w-full py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Generate 3 Hook Variations</span>
+          </button>
+        </div>
+
+        <!-- Loading -->
+        <div id="generate-loading" class="hidden space-y-3 mb-4">
+          <div class="card p-4"><div class="shimmer h-4 rounded-lg mb-2 w-3/4"></div><div class="shimmer h-3 rounded-lg mb-1.5 w-full"></div><div class="shimmer h-3 rounded-lg w-2/3"></div></div>
+          <div class="card p-4"><div class="shimmer h-4 rounded-lg mb-2 w-1/2"></div><div class="shimmer h-3 rounded-lg mb-1.5 w-full"></div><div class="shimmer h-3 rounded-lg w-3/4"></div></div>
+          <div class="card p-4"><div class="shimmer h-4 rounded-lg mb-2 w-2/3"></div><div class="shimmer h-3 rounded-lg mb-1.5 w-full"></div><div class="shimmer h-3 rounded-lg w-1/2"></div></div>
+        </div>
+
+        <!-- Results -->
+        <div id="generate-results" class="hidden">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-bold text-slate-300">Generated Hooks</h2>
+            <button onclick="generateIdeas()" class="text-xs hover:text-white transition-colors flex items-center gap-1.5" style="color:#A78BFA;">
+              <i class="fa-solid fa-arrows-rotate text-xs"></i> Regenerate
+            </button>
+          </div>
+          <div id="hooks-container" class="space-y-3"></div>
+          <div class="mt-4 p-3 rounded-xl" style="background:#F9731612;border:1px solid #F9731630;">
+            <p class="text-xs font-semibold mb-1" style="color:#FB923C;">🍳 Food Creator Tip</p>
+            <p id="pro-tip-text" class="text-xs text-slate-400"></p>
+          </div>
+        </div>
+
+        <!-- Empty -->
+        <div id="generate-empty" class="text-center py-12">
+          <div class="text-5xl mb-4">🍜</div>
+          <h3 class="font-bold text-white mb-1">Start Cooking Up Ideas</h3>
+          <p class="text-sm text-slate-500 max-w-xs mx-auto">Enter a food topic and format to generate viral hook scripts.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           SCRIPT STUDIO PANEL
+      ═══════════════════════════════════════ -->
+      <div id="panel-script" class="panel px-4 pt-5 pb-8 max-w-2xl mx-auto w-full">
+        <div class="mb-5">
+          <h1 class="text-xl font-black text-white mb-1">Script Studio</h1>
+          <p class="text-sm text-slate-400">Write, time, and visualize your food Short.</p>
+        </div>
+
+        <div class="card p-4 mb-4">
+          <input id="script-title" type="text" placeholder="Script title (e.g. 'The Easiest 5-Min Pasta')..." class="input-field w-full px-3 py-2.5 rounded-xl text-sm font-semibold mb-3"/>
+
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs text-slate-500">Video Length Estimate</span>
+            <div class="flex items-center gap-2">
+              <span id="word-count-label" class="text-xs text-slate-500">0 words</span>
+              <span id="duration-badge" class="badge badge-green">~0s</span>
+              <span id="over-badge" class="badge badge-red hidden">Over 60s!</span>
+            </div>
+          </div>
+          <div class="prog-bar mb-3">
+            <div id="duration-bar" class="prog-fill" style="width:0%"></div>
+          </div>
+
+          <textarea id="script-textarea" rows="9" placeholder="Write your script here... Speak to your viewer like a friend in the kitchen. Tip: Start with your hook, then the cooking, then a quick result reveal." class="input-field w-full px-3 py-3 rounded-xl text-sm resize-none leading-relaxed" oninput="updateScriptMetrics()"></textarea>
+
+          <!-- Quick Food Script Templates -->
+          <div class="mt-3 mb-3">
+            <div class="text-xs text-slate-500 mb-2 font-medium">Quick Templates:</div>
+            <div class="flex flex-wrap gap-1.5">
+              <button onclick="applyTemplate('recipe')" class="filter-chip">📖 Recipe</button>
+              <button onclick="applyTemplate('hack')" class="filter-chip">⚡ Hack</button>
+              <button onclick="applyTemplate('taste-test')" class="filter-chip">😋 Taste Test</button>
+              <button onclick="applyTemplate('budget')" class="filter-chip">💸 Budget Meal</button>
+              <button onclick="applyTemplate('challenge')" class="filter-chip">🏆 Challenge</button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mt-2">
+            <button onclick="buildShotList()" class="btn-primary px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+              <i class="fa-solid fa-film"></i> Build Shot List
+            </button>
+            <button onclick="copyScript()" class="btn-secondary px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+              <i class="fa-solid fa-copy"></i> Copy
+            </button>
+            <button onclick="saveToLibrary()" class="btn-secondary px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 flex-1">
+              <i class="fa-solid fa-bookmark"></i> Save
+            </button>
+          </div>
+        </div>
+
+        <!-- Shot List -->
+        <div id="shotlist-container" class="hidden mb-4">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-bold text-slate-300 flex items-center gap-2">
+              <i class="fa-solid fa-clapperboard text-xs" style="color:#A78BFA;"></i> Shot List
+            </h2>
+            <div class="flex items-center gap-2">
+              <span class="badge badge-violet"><i class="fa-solid fa-video mr-1 text-xs"></i>Visual</span>
+              <span class="badge badge-pink"><i class="fa-solid fa-microphone mr-1 text-xs"></i>Audio</span>
+            </div>
+          </div>
+          <div id="shotlist-rows" class="space-y-2 mb-3"></div>
+          <button onclick="copyShotList()" class="btn-ghost w-full py-2.5 rounded-xl text-xs flex items-center justify-center gap-2">
+            <i class="fa-solid fa-copy"></i> Copy Shot List
+          </button>
+        </div>
+
+        <!-- Hook Paste -->
+        <div class="card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="fa-solid fa-link text-xs" style="color:#A78BFA;"></i>
+            <span class="text-sm font-semibold text-slate-300">Paste Hook from Generator</span>
+          </div>
+          <p class="text-xs text-slate-500 mb-3">Found the perfect hook? Paste it here to prepend to your script.</p>
+          <div class="flex gap-2">
+            <input id="hook-paste-input" type="text" placeholder="Paste your hook line here..." class="input-field flex-1 px-3 py-2 rounded-xl text-xs"/>
+            <button onclick="prependHook()" class="btn-primary px-4 py-2 rounded-xl text-xs whitespace-nowrap">Prepend</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           LIBRARY PANEL
+      ═══════════════════════════════════════ -->
+      <div id="panel-library" class="panel px-4 pt-5 pb-8 max-w-2xl mx-auto w-full">
+        <div class="flex items-start justify-between mb-5">
+          <div>
+            <h1 class="text-xl font-black text-white mb-1">Library</h1>
+            <p class="text-sm text-slate-400">Your saved food scripts &amp; ideas.</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="exportJSON()" class="btn-ghost px-3 py-2 rounded-xl text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-file-code"></i> JSON
+            </button>
+            <button onclick="exportCSV()" class="btn-ghost px-3 py-2 rounded-xl text-xs flex items-center gap-1.5">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="relative mb-4">
+          <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-xs"></i>
+          <input id="lib-search" type="text" placeholder="Search your library..." oninput="renderLibrary()" class="input-field w-full pl-8 pr-3 py-2.5 rounded-xl text-sm"/>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-3 mb-5">
+          <div class="card p-3 text-center">
+            <div id="stat-total" class="text-2xl font-black text-white">0</div>
+            <div class="text-xs text-slate-500 mt-0.5">Saved</div>
+          </div>
+          <div class="card p-3 text-center">
+            <div id="stat-scripts" class="text-2xl font-black" style="color:#A78BFA;">0</div>
+            <div class="text-xs text-slate-500 mt-0.5">Scripts</div>
+          </div>
+          <div class="card p-3 text-center">
+            <div id="stat-ideas" class="text-2xl font-black" style="color:#FB923C;">0</div>
+            <div class="text-xs text-slate-500 mt-0.5">Ideas</div>
+          </div>
+        </div>
+
+        <div id="library-list" class="space-y-3"></div>
+        <div id="library-empty" class="text-center py-14 hidden">
+          <div class="text-5xl mb-4">📚</div>
+          <h3 class="font-bold text-white mb-1">Nothing saved yet</h3>
+          <p class="text-sm text-slate-500 max-w-xs mx-auto">Roll the dice for ideas, generate hooks, or write a script — then save it here.</p>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-nav fixed bottom-0 left-0 right-0 z-50 grid grid-cols-4" style="background:#0D0D12F0;backdrop-filter:blur(16px);border-top:1px solid #1A1A28;padding-bottom:env(safe-area-inset-bottom);">
+      <button onclick="switchTab('dice')" id="mob-tab-dice" class="tab-btn flex flex-col items-center justify-center py-2.5 gap-0.5 relative">
+        <div class="tab-pip absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full opacity-0 transition-all" style="background:linear-gradient(90deg,#F97316,#EC4899);"></div>
+        <span class="tab-icon text-lg text-slate-500">🎲</span>
+        <span class="tab-label text-xs text-slate-500 font-medium">Dice</span>
+      </button>
+      <button onclick="switchTab('generate')" id="mob-tab-generate" class="tab-btn flex flex-col items-center justify-center py-2.5 gap-0.5 relative">
+        <div class="tab-pip absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full opacity-0 transition-all" style="background:linear-gradient(90deg,#8B5CF6,#EC4899);"></div>
+        <i class="tab-icon fa-solid fa-wand-magic-sparkles text-base text-slate-500"></i>
+        <span class="tab-label text-xs text-slate-500 font-medium">Hooks</span>
+      </button>
+      <button onclick="switchTab('script')" id="mob-tab-script" class="tab-btn flex flex-col items-center justify-center py-2.5 gap-0.5 relative">
+        <div class="tab-pip absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full opacity-0 transition-all" style="background:linear-gradient(90deg,#8B5CF6,#EC4899);"></div>
+        <i class="tab-icon fa-solid fa-scroll text-base text-slate-500"></i>
+        <span class="tab-label text-xs text-slate-500 font-medium">Script</span>
+      </button>
+      <button onclick="switchTab('library')" id="mob-tab-library" class="tab-btn flex flex-col items-center justify-center py-2.5 gap-0.5 relative">
+        <div class="tab-pip absolute top-0 left-1/2 -translate-x-1/2 w-6 h-0.5 rounded-full opacity-0 transition-all" style="background:linear-gradient(90deg,#8B5CF6,#EC4899);"></div>
+        <i class="tab-icon fa-solid fa-layer-group text-base text-slate-500"></i>
+        <span class="tab-label text-xs text-slate-500 font-medium">Library</span>
+      </button>
+    </nav>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div id="settings-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeSettings()">
+  <div class="modal-sheet p-6 w-full">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-lg font-black text-white">Settings</h2>
+      <button onclick="closeSettings()" class="w-8 h-8 flex items-center justify-center btn-ghost rounded-xl text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="mb-5">
+      <label class="block text-sm font-bold text-slate-300 mb-1">AI Provider</label>
+      <p class="text-xs text-slate-500 mb-3">Add an API key for AI-powered hooks. Without one, ShortSpark uses its built-in food content engine — still great!</p>
+      <select id="ai-provider-select" class="input-field w-full px-3 py-2.5 rounded-xl text-sm mb-3 appearance-none" onchange="toggleProviderFields()">
+        <option value="none">⚡ Built-in Food Engine (No Key Needed)</option>
+        <option value="gemini">🤖 Google Gemini (Free Tier)</option>
+        <option value="openai">🧠 OpenAI GPT-4o</option>
+      </select>
+      <div id="gemini-field" class="hidden">
+        <label class="block text-xs text-slate-400 mb-1.5">Gemini API Key</label>
+        <div class="flex gap-2">
+          <input id="gemini-key-input" type="password" placeholder="AIza..." class="input-field flex-1 px-3 py-2.5 rounded-xl text-sm"/>
+          <button onclick="toggleVis('gemini-key-input')" class="btn-ghost px-3 rounded-xl text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
+        <p class="text-xs text-slate-600 mt-1.5">Free at <span style="color:#A78BFA;">aistudio.google.com</span></p>
+      </div>
+      <div id="openai-field" class="hidden">
+        <label class="block text-xs text-slate-400 mb-1.5">OpenAI API Key</label>
+        <div class="flex gap-2">
+          <input id="openai-key-input" type="password" placeholder="sk-..." class="input-field flex-1 px-3 py-2.5 rounded-xl text-sm"/>
+          <button onclick="toggleVis('openai-key-input')" class="btn-ghost px-3 rounded-xl text-xs"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="mb-5">
+      <label class="block text-sm font-bold text-slate-300 mb-2">Default Tone</label>
+      <select id="tone-select" class="input-field w-full px-3 py-2.5 rounded-xl text-sm appearance-none">
+        <option value="energetic">⚡ Energetic & Punchy</option>
+        <option value="casual">😎 Casual & Conversational</option>
+        <option value="dramatic">🎭 Dramatic & Suspenseful</option>
+        <option value="asmr">🎙 Calm & ASMR-friendly</option>
+        <option value="humorous">😂 Funny & Relatable</option>
+      </select>
+    </div>
+    <div class="mb-5 pt-4 border-t border-slate-800">
+      <label class="block text-sm font-bold text-slate-300 mb-2">Danger Zone</label>
+      <button onclick="clearLibrary()" class="btn-danger w-full py-2.5 rounded-xl text-sm flex items-center justify-center gap-2">
+        <i class="fa-solid fa-trash-can"></i> Clear Entire Library
+      </button>
+    </div>
+    <div class="flex gap-3">
+      <button onclick="closeSettings()" class="btn-ghost flex-1 py-3 rounded-xl text-sm">Cancel</button>
+      <button onclick="saveSettings()" class="btn-primary flex-1 py-3 rounded-xl text-sm">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div id="edit-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal-sheet p-6 w-full">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-black text-white">Edit Entry</h2>
+      <button onclick="closeEditModal()" class="w-8 h-8 flex items-center justify-center btn-ghost rounded-xl text-sm"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <input id="edit-title" type="text" placeholder="Title..." class="input-field w-full px-3 py-2.5 rounded-xl text-sm font-semibold mb-3"/>
+    <textarea id="edit-content" class="input-field w-full px-3 py-3 rounded-xl text-sm resize-none leading-relaxed mb-4" rows="9"></textarea>
+    <div class="flex gap-3">
+      <button onclick="closeEditModal()" class="btn-ghost flex-1 py-3 rounded-xl text-sm">Cancel</button>
+      <button onclick="saveEdit()" class="btn-primary flex-1 py-3 rounded-xl text-sm">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// IN-MEMORY localStorage SHIM
+// Replaces blocked localStorage in sandboxed envs
+// ─────────────────────────────────────────────
+(function() {
+  try { localStorage.setItem('_test','1'); localStorage.removeItem('_test'); }
+  catch(e) {
+    const _store = {};
+    const shim = {
+      getItem: k => Object.prototype.hasOwnProperty.call(_store, k) ? _store[k] : null,
+      setItem: (k, v) => { _store[k] = String(v); },
+      removeItem: k => { delete _store[k]; },
+      clear: () => { Object.keys(_store).forEach(k => delete _store[k]); },
+      key: i => Object.keys(_store)[i] ?? null,
+      get length() { return Object.keys(_store).length; }
+    };
+    try { Object.defineProperty(window, 'localStorage', { value: shim }); }
+    catch(e2) { window.localStorage = shim; }
+  }
+})();
+
+// ─────────────────────────────────────────────
+// FOOD DICE DATABASE — 80+ ideas across 6 cats
+// ─────────────────────────────────────────────
+const DICE_IDEAS = {
+  recipes: [
+    { title:"5-Ingredient Pasta That Slaps Every Time", hook:"You need 5 ingredients, 10 minutes, and zero cooking experience. This pasta is embarrassingly good.", desc:"A weeknight hero recipe that feels fancy but requires almost nothing. Great for beginners and busy people.", pacing:"Fast cuts, one pot, 45 seconds total", format:"Tutorial Speedrun", hookstyle:"Relatable Struggle", viral:94, opening:"Close-up of dry pasta dropping into boiling water. Satisfying splash. Title card: '5 ingredients. 10 minutes. Let's go.'" },
+    { title:"Grandma's Secret Fried Rice (She Finally Shared It)", hook:"My grandmother refused to write this recipe down for 40 years. She finally showed me. I'm sharing it right now.", desc:"A nostalgic, emotion-driven recipe Short that hooks on the 'secret' angle and pays off with an actual technique reveal.", pacing:"Warm pacing, soft cuts, 55 seconds", format:"Storytime + Recipe", hookstyle:"Emotional Reveal", viral:91, opening:"Old photo of grandma in the kitchen appears on screen. Creator holds a worn recipe card. 'She finally gave it to me.'" },
+    { title:"Crispy Chicken Thighs: The Chef Technique Nobody Teaches", hook:"Every home cook gets soggy chicken. This one step fixes it permanently.", desc:"A technique-first recipe Short where the skill reveal IS the hook. Targets people who have failed at crispy chicken.", pacing:"Focused and methodical, 50 seconds", format:"Pro Technique Reveal", hookstyle:"Problem-Solution", viral:89, opening:"Split screen: rubbery sad chicken on left, crackling golden thigh on right. Creator points at the difference." },
+    { title:"Making Ramen From Scratch in Under 60 Seconds of Video", hook:"Full homemade ramen broth, noodles, toppings — I show you the entire process in one Short.", desc:"A satisfying speedrun-format recipe that proves homemade ramen is achievable. The time constraint creates tension.", pacing:"Rapid fire, 5 cuts per ingredient, 58 seconds", format:"Recipe Speedrun", hookstyle:"Challenge + Result", viral:92, opening:"Whole pork belly, dried mushrooms, soy sauce lined up. Creator snaps fingers. Montage begins." },
+    { title:"The Lazy Person's Shakshuka (5 Minutes, One Pan)", hook:"If you can open a can of tomatoes, you can make the most impressive breakfast of your life.", desc:"Shakshuka is inherently photogenic and satisfying to watch. This version removes every barrier to entry.", pacing:"Chill weekend energy, 50 seconds", format:"Beginner Recipe", hookstyle:"Low Bar + High Reward", viral:86, opening:"Egg cracking into bubbling tomato sauce, yolk staying perfectly intact. Close-up with steam rising." },
+    { title:"Cloud Bread: Is It Actually Worth Making?", hook:"Cloud bread is everywhere. I made it. Here is my completely honest review.", desc:"Reaction + honest review of a trendy recipe. The 'honest verdict' angle drives comments from people who agree or disagree.", pacing:"Conversational, 55 seconds", format:"Trend Review", hookstyle:"Honest Opinion", viral:83, opening:"Creator holds up the finished cloud bread, squeezes it. Face tells the story before a word is spoken." },
+    { title:"Scrambled Eggs: You've Been Doing It Wrong", hook:"Stop. Don't add milk. Here's why your scrambled eggs are rubbery and how to fix them in 3 seconds.", desc:"Simple, high-stakes claim about an everyday food. Everyone has strong opinions about scrambled eggs — perfect for comments.", pacing:"Urgent, punchy, 40 seconds", format:"Mythbust + Fix", hookstyle:"You're Wrong Hook", viral:96, opening:"Sad, rubbery scrambled eggs shown first. Creator shakes head. Cut to the correct technique beginning." },
+    { title:"One-Pan Salmon in 12 Minutes", hook:"Restaurant-quality salmon, one pan, zero washing up. I make this every week.", desc:"Salmon is aspirational but achievable. The one-pan angle removes the intimidation factor completely.", pacing:"Smooth and satisfying, 48 seconds", format:"Quick Recipe", hookstyle:"Achievable Luxury", viral:88, opening:"Raw salmon fillet placed skin-down into a cold pan. Creator: 'Starting cold. Trust me.'" },
+    { title:"The Pasta Shape Actually Matters — Here's Proof", hook:"I made the exact same sauce with 5 different pasta shapes. The difference is not subtle.", desc:"Challenges a common assumption while teaching real technique. High rewatch value.", pacing:"Shape-by-shape comparison, 55 seconds", format:"Comparison Test", hookstyle:"Myth Challenge", viral:90, opening:"Five bowls, five shapes, same red sauce. Creator holds up rigatoni: 'Starting with the best one.'" },
+    { title:"Homemade Pizza Dough in 5 Minutes (No Yeast)", hook:"No yeast, no waiting, no problem. This pizza dough takes 5 minutes and actually works.", desc:"Removes the biggest barrier to homemade pizza. The no-yeast claim drives massive curiosity.", pacing:"Fast and punchy, 45 seconds", format:"Shortcut Recipe", hookstyle:"Barrier Removal", viral:92, opening:"Store-bought pizza next to a homemade one. Creator points at the homemade: 'This took 5 minutes of actual work.'" },
+    { title:"Why Your Cookies Always Come Out Wrong", hook:"Flat cookies, crispy cookies, cakey cookies — I figured out why and it's embarrassingly simple.", desc:"Universal baking frustration with a satisfying fix. Everyone has failed at cookies.", pacing:"Problem then solution, 52 seconds", format:"Baking Fix", hookstyle:"Relatable Failure", viral:91, opening:"Sad flat cookie on a plate. Creator shakes head. 'This is fixable. Watch.'" },
+    { title:"3-Ingredient Nutella Brownies — That's It", hook:"Three ingredients. Fifteen minutes. These brownies will make you question everything you know about baking.", desc:"Minimal ingredient recipes perform extremely well. Nutella has universal recognition and appeal.", pacing:"Satisfying and simple, 40 seconds", format:"Minimal Ingredient Recipe", hookstyle:"Disbelief Hook", viral:94, opening:"Three items on the counter: Nutella jar, eggs, flour. Creator: 'That is literally everything.'" },
+    { title:"I Made Gordon Ramsay's Beef Wellington at Home", hook:"Gordon Ramsay's most iconic dish. I made it in my apartment kitchen with no professional training. Here's what happened.", desc:"Aspirational challenge + relatable home cook vulnerability. The 'will it work?' tension drives full watch-through.", pacing:"Build tension, dramatic reveal, 58 seconds", format:"Home Cook Challenge", hookstyle:"Aspirational + Suspense", viral:90, opening:"Printed photo of Ramsay's Wellington. Creator nervously looks at camera. 'Let's try this.'" },
+  ],
+  hacks: [
+    { title:"The Ice Cube Trick That Makes Every Steak Better", hook:"Put an ice cube on your steak while it rests. I know it sounds insane. Watch what happens.", desc:"A counterintuitive hack that's visually demonstrable and easy to test at home. High share potential.", pacing:"Quick demo, 35 seconds", format:"Single Hack Demo", hookstyle:"Counterintuitive Claim", viral:93, opening:"Steak resting on board. Creator drops an ice cube on top in slow motion. Sizzle sound." },
+    { title:"3 Ways to Peel Garlic in 5 Seconds Each", hook:"You've been wasting 2 minutes peeling garlic. Stop. Here are 3 methods and I'll show you which one actually wins.", desc:"Comparative hack format with a clear winner reveal at the end. Solves a universal cooking frustration.", pacing:"Side-by-side fast cuts, 45 seconds", format:"Hack Comparison", hookstyle:"Race Format", viral:88, opening:"Three heads of garlic lined up. Stopwatch appears on screen. 'Method 1, go.'" },
+    { title:"The Butter Trick That Makes Toast Incredible", hook:"You've been buttering toast wrong. The correct way takes 8 seconds and changes everything.", desc:"Simple, accessible hack that improves a daily ritual. Very low barrier — anyone can try this today.", pacing:"Simple and satisfying, 30 seconds", format:"Single Hack", hookstyle:"Daily Upgrade", viral:85, opening:"Unbuttered toast close-up. Creator holds butter. 'Watch the order I do this.'" },
+    { title:"Freeze Your Ginger — Here's Why Every Cook Swears By It", hook:"Frozen ginger grates into powder in 3 seconds. I will never go back to fresh ginger again.", desc:"Storage hack that's genuinely useful and satisfying to watch. The grating demo is very ASMR-friendly.", pacing:"Calm and satisfying, 40 seconds", format:"Storage Hack", hookstyle:"Better Method Reveal", viral:82, opening:"Fresh ginger root placed in freezer. Time lapse. Frozen ginger grated effortlessly into fine powder." },
+    { title:"Use Your Pasta Water — It's Liquid Gold", hook:"Every chef in Italy is furious that you're pouring this down the drain. Pasta water is the secret to every great sauce.", desc:"Educates on an invisible technique. The 'secret Italian chefs know' framing makes it feel exclusive.", pacing:"Methodical demonstration, 50 seconds", format:"Chef Secret Reveal", hookstyle:"You're Wasting Gold", viral:87, opening:"Colander over drain as pasta water disappears. Creator's face looks horrified. 'No no no.'" },
+    { title:"The 2-Minute Microwave Mug Cake That Actually Tastes Good", hook:"I know what you're thinking. I thought the same thing. I was wrong. This mug cake is genuinely delicious.", desc:"The self-aware hook pre-empts skepticism. The taste reaction at the end is the payoff.", pacing:"Quick prep, genuine reaction, 45 seconds", format:"Quick Recipe + Reaction", hookstyle:"Skeptic Converted", viral:84, opening:"Creator raises one skeptical eyebrow at the camera. Places mug in microwave. '2 minutes. Let's find out.'" },
+    { title:"Ripen Avocados Overnight: The Paper Bag Hack Tested", hook:"I tested 4 avocado ripening hacks. One of them is a complete lie. Here are the actual results.", desc:"Testing format adds credibility and genuine value. Results-based content performs very well in food niche.", pacing:"Experiment format, 55 seconds", format:"Hack Testing", hookstyle:"Myth Testing with Results", viral:89, opening:"4 underripe avocados labeled 1-4, placed in different conditions. Creator presses record: 'See you tomorrow.'" },
+    { title:"The Wooden Spoon Trick That Stops Pots Boiling Over", hook:"Put a wooden spoon across your pot. I know it sounds fake. It is not fake.", desc:"Simple, visual, immediately testable at home. One of the most shared kitchen hacks ever.", pacing:"Quick demo, 30 seconds", format:"Single Hack", hookstyle:"Counterintuitive Proof", viral:95, opening:"Pot of water approaching boil. Wooden spoon placed across top. Camera stays on it. Nothing boils over." },
+    { title:"Stop Storing Herbs Wrong — Here's the Right Way", hook:"Fresh herbs last 2 days the normal way. They last 3 weeks the right way.", desc:"Longevity hack with clear before/after proof. Saves money which is always relatable.", pacing:"Direct demo, 38 seconds", format:"Storage Hack", hookstyle:"Time/Money Saver", viral:87, opening:"Wilted herbs vs fresh herbs side by side after 2 weeks. Creator: 'Same herbs. Different storage.'" },
+    { title:"Peel a Boiled Egg in 5 Seconds With This Method", hook:"I've peeled eggs wrong my entire life. This is how you actually do it.", desc:"Everyone boils eggs, everyone struggles with peeling. Perfect relatable hack.", pacing:"Single technique demo, 35 seconds", format:"Technique Hack", hookstyle:"Universal Struggle Fix", viral:89, opening:"Creator attempts old method — shell sticks everywhere. Cut to new method: egg slides out in 5 seconds." },
+    { title:"Salt Your Pasta Water Like This (Not Like That)", hook:"If your pasta tastes bland, you have a salt problem. Here's exactly how much and when to add it.", desc:"Corrects a widespread mistake with a specific, actionable fix. Comments will be full of 'I had no idea' reactions.", pacing:"Direct and efficient, 38 seconds", format:"Technique Fix", hookstyle:"You're Doing It Wrong", viral:86, opening:"Huge pinch of salt poured into boiling water — more than viewers expect. Creator looks at camera: 'Yes, that much.'" },
+  ],
+  challenges: [
+    { title:"I Ate Like a Michelin Star Chef for 24 Hours (on $50)", hook:"Full Michelin-star level meals for an entire day. I had $50. Here's what I pulled off.", desc:"The tension between luxury aspiration and strict budget creates the perfect Short narrative arc.", pacing:"Day structure, 3 meal reveals, 58 seconds", format:"Day Challenge", hookstyle:"Constraint + Aspiration", viral:92, opening:"$50 bill held up to camera. Calendar shows one day. 'This is happening.'" },
+    { title:"Can You Cook a Full Dinner Using Only Condiments?", hook:"Every ingredient in this dinner came from condiment packets. Yes, the ones you hoard from takeout orders.", desc:"Absurd constraint + relatable setup (who doesn't have a drawer of ketchup packets?). Extremely shareable.", pacing:"Comedic, fast problem-solving, 55 seconds", format:"Absurd Constraint Challenge", hookstyle:"Ridiculous Premise", viral:90, opening:"Creator opens kitchen drawer. Hundreds of condiment packets fall out. Grins at camera: 'Dinner is served.'" },
+    { title:"30-Day McDonald's vs Homemade: Week 1 Recap", hook:"I'm making every McDonald's menu item from scratch for 30 days. Week 1 results are honestly shocking.", desc:"Series-friendly format that builds audience across multiple Shorts. Week 1 recap creates urgency to follow for the rest.", pacing:"Fast recap of 7 attempts, 58 seconds", format:"Series Recap", hookstyle:"Series Hook (Follow Me)", viral:88, opening:"McDonald's bag on left, homemade version on right, each day labeled. Results score card appears." },
+    { title:"Can I Cook a Gourmet 3-Course Meal in 10 Minutes?", hook:"Professional chefs do this in 10 minutes. I'm not a professional chef. Here's what happened when I tried.", desc:"Self-deprecating challenge with genuine stakes. The 'I might fail' energy keeps viewers watching to see the result.", pacing:"Countdown format, intense, 55 seconds", format:"Speed Challenge", hookstyle:"Ticking Clock", viral:91, opening:"Kitchen timer set to 10:00. Creator cracks knuckles. 'Appetizer, main, dessert. Let's go.'" },
+    { title:"Every Meal for a Week: $7 a Day Budget", hook:"$7 a day for a full week of meals. Here are 3 days of what I actually ate — and it was surprisingly good.", desc:"Financial constraint content is extremely relatable. The 'it was actually good' twist subverts low expectations.", pacing:"Day-by-day fast cuts, 58 seconds", format:"Week Challenge", hookstyle:"Budget + Surprise Quality", viral:87, opening:"$49 in cash spread on kitchen table. Creator picks it up: 'This is my entire food budget for 7 days.'" },
+    { title:"Cooking a Full Roast Using Only a Microwave", hook:"Full Sunday roast. Only a microwave. I gave myself 30 minutes. Here's what actually happened.", desc:"Absurd constraint creates maximum curiosity. The 'what happened' framing drives full watch-through.", pacing:"Tense, building, 58 seconds", format:"Constraint Challenge", hookstyle:"Absurd Constraint", viral:93, opening:"Full raw chicken in front of a microwave. Creator: 'I'm doing this. I don't know how. But I'm doing this.'" },
+    { title:"Cooking Every Meal From a Random Country for 24 Hours", hook:"I spun a wheel. It landed on a country. I ate nothing but that country's food for 24 hours.", desc:"Random element creates genuine unpredictability. Wheel spin is inherently watchable.", pacing:"Meal-by-meal reveal, 58 seconds", format:"Random Country Challenge", hookstyle:"Random + Commitment", viral:90, opening:"Wheel of countries spins on screen. Creator watches nervously. It lands. Their face reacts." },
+    { title:"I Let My 8-Year-Old Plan Every Meal for a Day", hook:"My kid planned all my meals today. No vetoes allowed. This went exactly as well as you'd expect.", desc:"Kid involvement creates heartwarming chaos. The no-veto rule generates anticipation.", pacing:"Chaotic and fun, 56 seconds", format:"Family Challenge", hookstyle:"Chaos With Rules", viral:91, opening:"Child holds up handwritten meal plan. Camera zooms in. 'Breakfast: 3 chocolate bars.' Creator sighs." },
+    { title:"Only Eating Food from Gas Stations for 24 Hours", hook:"Every single meal, snack, and drink had to come from a gas station. This is what I discovered.", desc:"Shocking constraint with unexpected food discoveries. The absurdity makes it highly shareable.", pacing:"Journey style, 3 meals revealed, 55 seconds", format:"Absurd Location Challenge", hookstyle:"Shocking Premise", viral:94, opening:"Creator pulls into a gas station. Holds camera up to the snack aisle: 'This is my kitchen today.'" },
+    { title:"Cooking Every Egg Method: Which One is Actually Best?", hook:"Scrambled. Fried. Poached. Soft boiled. Baked. I made all of them and ranked them. The results surprised me.", desc:"Comparison + ranking creates a natural comment magnet — everyone will disagree with the ranking.", pacing:"Quick cuts per method, clear ranking reveal, 55 seconds", format:"Tier List Challenge", hookstyle:"Rankings + Debate Bait", viral:89, opening:"Six eggs cracked simultaneously into six different pans and pots. Wide shot. Creator: 'Let the egg olympics begin.'" },
+  ],
+  reviews: [
+    { title:"I Tried 5 Viral TikTok Recipes — Honest Tier List", hook:"I spent a week making the most viral food recipes on the internet. Some are genius. Some are lies. Here's my tier list.", desc:"The 'honest reviewer' angle builds trust and drives comments from people who've also tried them.", pacing:"Snappy reveal per recipe, 58 seconds", format:"Review + Tier List", hookstyle:"Trusted Opinion", viral:91, opening:"Five dishes lined up on counter. Creator holds a tier list board. 'S tier down to F tier. Let's begin.'" },
+    { title:"Ordering the Most Expensive Item from 5 Fast Food Chains", hook:"I ordered the single most expensive item from 5 major fast food chains. Was any of it worth it? Absolutely not.", desc:"Price revelation + honest disappointment creates perfect relatable content. The negative verdict is funnier than a positive one.", pacing:"One reveal per chain, 55 seconds", format:"Comparison Review", hookstyle:"Overpriced Reveal", viral:88, opening:"Receipt from each restaurant shown. Creator circles the price. 'I paid THIS for this.'" },
+    { title:"I Finally Tried Food From [Viral Creator] — My Verdict", hook:"I made every dish from [Creator]'s most viral food videos this week. Not all of them work in real life.", desc:"Piggybacks on an existing creator's audience while providing genuine value. Fill in with any relevant food creator.", pacing:"Recipe-by-recipe reveal, 56 seconds", format:"Creator Cookbook Review", hookstyle:"Authority Challenge", viral:85, opening:"Compilation of viral food clips. Creator closes laptop: 'I'm making all of these. Starting now.'" },
+    { title:"Ranking Every Instant Ramen Brand I Could Find", hook:"I found 11 different instant ramen brands. I ranked them all. My #1 pick will genuinely shock you.", desc:"Instant ramen has a massive, passionate fanbase. Any ranking will generate strong opinions in comments.", pacing:"Quick per-brand reactions, dramatic final ranking, 58 seconds", format:"Product Ranking", hookstyle:"Definitive List + Shock Reveal", viral:93, opening:"11 ramen packets fanned out like cards. Creator picks one up: 'Starting from the bottom.'" },
+    { title:"What $100 of Sushi Actually Gets You in Different Cities", hook:"$100 of sushi in Tokyo vs New York vs my local spot. The value difference is genuinely embarrassing.", desc:"Location-based comparison with the aspirational element of traveling for food. The 'value' angle makes it relatable.", pacing:"City-by-city reveal, 56 seconds", format:"Location Comparison Review", hookstyle:"Value Gap Reveal", viral:86, opening:"Map shows three cities. Creator zooms to each: '$100. Same budget. Let's see what we get.'" },
+    { title:"Honest Review: Air Fryer vs Deep Fryer vs Oven — Which Wins?", hook:"I made the exact same wings three ways. One method destroyed the others. This is not what I expected.", desc:"The 'unexpected winner' framing creates curiosity. Every viewer thinks they know the answer before watching.", pacing:"Direct comparison, climactic reveal, 55 seconds", format:"Method Comparison Review", hookstyle:"Unexpected Winner", viral:90, opening:"Three identical trays of wings. Three different appliances on the counter. Creator: 'Same wings. Different methods. Let's find the winner.'" },
+  ],
+  budget: [
+    { title:"Feeding a Family of 4 for $20 — Full Day of Meals", hook:"Three meals, four people, twenty dollars. I planned, shopped, and cooked everything. Here's how it went.", desc:"Extremely relatable content for parents and budget-conscious viewers. The specific number gives it credibility.", pacing:"Breakfast → Lunch → Dinner reveal structure, 58 seconds", format:"Day Meal Plan", hookstyle:"Specific Budget Challenge", viral:91, opening:"$20 bill. Shopping list. Creator stands in grocery store: 'This has to feed 4 people for the whole day.'" },
+    { title:"The Cheapest Meals That Don't Taste Cheap", hook:"A bag of lentils costs $2 and feeds me for 3 days. Here are 3 recipes that taste like you spent $30.", desc:"Flips the script — budget food that tastes expensive. The aspirational angle elevates what could feel depressing.", pacing:"Three recipes, rapid fire, 55 seconds", format:"Budget Recipe Series", hookstyle:"Elevate the Cheap", viral:87, opening:"Receipt close-up: full grocery bag, total $8.50. Creator: 'Three dinners from this. Watch.'" },
+    { title:"Cooking With Only What's Left in the Fridge (End of Week)", hook:"It's Sunday. There's almost nothing left. I'm not going to the store. Let's see what I can make.", desc:"Relatable 'empty fridge' situation turned into creative content. The constraint drives genuine problem-solving viewers enjoy watching.", pacing:"Improvisational energy, 50 seconds", format:"Constraint Cooking", hookstyle:"Relatable Situation", viral:85, opening:"Fridge door opens slowly. Camera pans to reveal almost nothing: half an onion, leftover rice, two eggs. Creator: 'Challenge accepted.'" },
+    { title:"Meal Prepping a Full Week for Under $30", hook:"Every meal, every day, for an entire week — prepped Sunday morning, costs $28.43 total.", desc:"Meal prep + budget is one of the strongest combination formats. Specific total cost makes it feel achievable.", pacing:"Efficient montage structure, 58 seconds", format:"Meal Prep Guide", hookstyle:"Specific + Achievable", viral:89, opening:"Empty fridge at start. Time-lapse of cooking. Full fridge at end labeled with each meal and day." },
+    { title:"The $1 Ingredient That Upgrades Every Cheap Meal", hook:"One dollar. One ingredient. It makes ramen, rice, eggs, and pasta taste completely different. You need to know this.", desc:"Single-ingredient hack with massive utility. The 'works on everything' claim creates broad appeal.", pacing:"Quick ingredient demos, 45 seconds", format:"Universal Hack", hookstyle:"Universal Upgrade", viral:93, opening:"Single ingredient held up in front of pantry. Creator turns to face camera: 'This changed how I cook. Watch.'" },
+    { title:"Gourmet Ramen From a 25p Packet", hook:"I took the cheapest instant ramen I could find and made it taste like a £15 restaurant bowl.", desc:"Elevation of the ultimate budget food. The price contrast is dramatic and satisfying.", pacing:"Step-by-step upgrade, 52 seconds", format:"Budget Elevation", hookstyle:"Maximum Contrast", viral:92, opening:"25p ramen packet held up. Creator: 'Starting here.' Final bowl shown. 'Ending here.' Gap is shocking." },
+    { title:"Everything in My Fridge — One Meal, No Waste", hook:"I'm using everything that's about to go bad. No shopping. No waste. Let's see what happens.", desc:"Zero-waste angle is highly shareable. The constraint of 'what's there' creates authentic problem-solving.", pacing:"Improvised energy, 50 seconds", format:"Zero Waste Cook", hookstyle:"Authenticity + Constraint", viral:86, opening:"Creator opens fridge slowly. Camera pans: half onion, sad spinach, leftover rice, one egg. 'Let's cook.'" },
+    { title:"Eating Gourmet on a Broke Person's Budget: Week 3", hook:"Week 3 of eating gourmet on $35 a week. I'm starting to enjoy this more than I expected.", desc:"Series format keeps viewers coming back. The 'surprisingly enjoying it' arc makes it compelling.", pacing:"Week recap with highlights, 55 seconds", format:"Ongoing Budget Series", hookstyle:"Series Update + Progress", viral:84, opening:"Running tally on whiteboard: Week 1, Week 2, Week 3. Creator checks it off: 'Day 15. Still alive. Still eating well.'" },
+  ],
+  global: [
+    { title:"I Made Authentic Bibimbap For the First Time — Honest Attempt", hook:"I've had bibimbap dozens of times. I'd never made it. This is my completely unfiltered first attempt.", desc:"Cultural cooking + beginner vulnerability creates high engagement. The 'honest first attempt' framing is very relatable.", pacing:"Process-focused with reaction at end, 56 seconds", format:"Cultural Recipe First Try", hookstyle:"Beginner Vulnerability", viral:87, opening:"Creator opens a Korean cookbook. Close-up of the bibimbap page. 'Let's try this properly for once.'" },
+    { title:"Thai Street Food I Tried to Recreate at Home", hook:"I ate this on the streets of Bangkok for $1. I just tried to make it in my kitchen. The price difference is insane.", desc:"Travel memory + home recreation. Even viewers who haven't been to Thailand will find the contrast compelling.", pacing:"Memory → Attempt → Comparison structure, 55 seconds", format:"Travel Recreation", hookstyle:"Travel + Home Contrast", viral:89, opening:"Footage of busy Thai street market. Creator looks at camera: 'I ate that every morning for $1. Today I find out how.'" },
+    { title:"The Italian Nonnas Were Right: This Pasta Technique Changes Everything", hook:"Every Italian grandmother makes pasta this way. I ignored it for years. I was embarrassingly wrong.", desc:"Authority source (Italian grandmothers) + personal humility creates a trustworthy, engaging hook.", pacing:"Technique-focused, deliberate, 52 seconds", format:"Technique Reveal", hookstyle:"Humility + Authority", viral:91, opening:"Old Italian cooking clip plays. Creator watches it on phone, looks up: 'Okay. I need to try this.'" },
+    { title:"Japanese Convenience Store Food vs American Fast Food: Taste Test", hook:"Japanese convenience stores have some of the best food in the world. American fast food has… different strengths. Let's compare.", desc:"Cultural comparison with a gentle controversial angle (Japan convenience food usually 'wins' — creates comments).", pacing:"Side-by-side reaction format, 56 seconds", format:"Cultural Comparison", hookstyle:"Cultural Contrast", viral:92, opening:"7-Eleven onigiri and sushi on one plate. McDonald's on another. Creator: 'Same category. Different universe.'" },
+    { title:"Making the Spiciest Dish From 6 Different Cultures", hook:"Every culture has its version of 'unbearably spicy'. I ate them all back to back. This was a terrible idea.", desc:"Spice challenge + cultural exploration. The self-inflicted suffering is highly entertaining and relatable.", pacing:"Rapid spice-reaction cuts, 58 seconds", format:"Spice Challenge Tour", hookstyle:"Suffering for Content", viral:94, opening:"Six bowls of varying redness lined up. Creator takes a deep breath: 'From mild to call-an-ambulance. Starting now.'" },
+    { title:"I Made Sushi at Home for the First Time — Was it Safe?", hook:"Homemade sushi. Raw fish. From a supermarket. I looked into whether this was actually safe to do.", desc:"Safety angle drives massive curiosity. People want to make sushi at home but worry about raw fish.", pacing:"Educational + cooking, 56 seconds", format:"Safety + Recipe", hookstyle:"Risk Curiosity", viral:91, opening:"Sushi-grade salmon from supermarket on cutting board. Creator: 'Everyone says don't do this. Let's find out why.'" },
+    { title:"The Turkish Breakfast That Changes How You Think About Mornings", hook:"In Turkey, breakfast is a 2-hour event with 15 dishes. I made the whole thing. It took my morning and I don't regret it.", desc:"Cultural revelation combined with personal experiment. Turkish breakfast is visually stunning.", pacing:"Generous and warm, 58 seconds", format:"Cultural Recreation", hookstyle:"Lifestyle Revelation", viral:88, opening:"Empty table. Creator sets down one dish after another until the table is completely covered. Sits down. Smiles." },
+    { title:"Every Type of Dumpling I Could Find in One Day", hook:"Gyoza, mandu, pierogi, momo, xiaolongbao — I found and ate every dumpling I could in one city in one day.", desc:"Quest format plus universal dumpling love. The competitive element of 'how many' drives engagement.", pacing:"Rapid quest format, 58 seconds", format:"Food Quest", hookstyle:"Quest + Count", viral:90, opening:"Map of the city. Creator marks the starting point: 'First stop: Japanese.' Montage of dumplings begins." },
+    { title:"I Made Dumplings 6 Different Ways (China vs Korea vs Japan)", hook:"Dumplings exist in almost every Asian cuisine and they're all different. I made all six versions. Here's the verdict.", desc:"Cross-cultural comparison of a beloved comfort food. The verdict creates debate in comments about 'the best' type.", pacing:"One dumpling type per quick cut, 58 seconds", format:"Cultural Comparison Recipe", hookstyle:"Definitive Ranking + Culture Appreciation", viral:88, opening:"Six different wrapper shapes laid out. Creator: 'Same concept. Six countries. Let's fold.'" },
+  ],
+};
+
+const DICE_FACES = ['🎲','⚀','⚁','⚂','⚃','⚄','⚅'];
+let activeCat = 'all';
+let currentDiceIdea = null;
+let _diceQueue = [];
+let _lastCat = null;
+let _seenDiceTitles = new Set();
+
+function setCat(el, cat) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  activeCat = cat;
+  _diceQueue = []; // reset queue on category change
+}
+
+function getAllIdeas() {
+  if (activeCat === 'all') {
+    return Object.values(DICE_IDEAS).flat();
+  }
+  return DICE_IDEAS[activeCat] || [];
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function nextIdea() {
+  const pool = getAllIdeas();
+  if (!pool.length) return null;
+  // Refill queue when empty or category changed
+  if (_diceQueue.length === 0 || _lastCat !== activeCat) {
+    _diceQueue = shuffle(pool);
+    _lastCat = activeCat;
+    // If only one idea, just return it
+    if (_diceQueue.length === 1) return _diceQueue[0];
+    // Avoid showing same idea as current first
+    if (currentDiceIdea && _diceQueue[0] === currentDiceIdea) {
+      _diceQueue.push(_diceQueue.shift());
+    }
+  }
+  return _diceQueue.shift();
+}
+
+async function rollDice() {
+  const pool = getAllIdeas();
+  if (!pool.length) { showToast('No ideas in this category yet!'); return; }
+
+  const dice = document.getElementById('dice-el');
+  const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+  dice.classList.remove('dice-spinning');
+  void dice.offsetWidth;
+  dice.classList.add('dice-spinning');
+
+  let flips = 0;
+  const flipInterval = setInterval(() => {
+    dice.textContent = faces[Math.floor(Math.random() * faces.length)];
+    flips++;
+    if (flips >= 8) {
+      clearInterval(flipInterval);
+      dice.textContent = faces[Math.floor(Math.random() * faces.length)];
+    }
+  }, 60);
+
+  // Try AI generation first
+  const provider = localStorage.getItem('ss_provider') || 'none';
+  const geminiKey = localStorage.getItem('ss_gemini_key') || '';
+  const openaiKey = localStorage.getItem('ss_openai_key') || '';
+  const hasAI = (provider === 'gemini' && geminiKey) || (provider === 'openai' && openaiKey);
+
+  if (hasAI) {
+    try {
+      const idea = await generateDiceIdeaWithAI(provider, geminiKey, openaiKey);
+      if (idea) {
+        setTimeout(() => {
+          currentDiceIdea = idea;
+          renderDiceResult(idea);
+        }, 520);
+        return;
+      }
+    } catch(e) { /* fall through to local */ }
+  }
+
+  // Fallback to local ideas
+  setTimeout(() => {
+    const idea = nextIdea();
+    if (!idea) return;
+    currentDiceIdea = idea;
+    renderDiceResult(idea);
+  }, 520);
+}
+
+async function generateDiceIdeaWithAI(provider, geminiKey, openaiKey) {
+  const cat = activeCat === 'all' ? 'any food/cooking' : activeCat;
+  const usedTitles = _seenDiceTitles.size > 0 ? 
+    `\n\nDo NOT repeat these recent ideas:\n${[..._seenDiceTitles].slice(-10).join('\n')}` : '';
+
+  const prompt = `You are a viral food content strategist. Generate ONE unique YouTube Shorts/TikTok food video idea in the category: "${cat}".
+
+Respond ONLY with a valid JSON object, no markdown, no code fences:
+{
+  "title": "Catchy video title (max 10 words)",
+  "hook": "The exact opening line spoken to camera (1-2 sentences, must grab in 2 seconds)",
+  "desc": "Why this works as viral content (1-2 sentences)",
+  "pacing": "Video pacing description (e.g. Fast cuts, 45 seconds)",
+  "format": "Video format name (e.g. Recipe Speedrun, Taste Test)",
+  "hookstyle": "Hook style name (e.g. Relatable Struggle, Myth Bust)",
+  "viral": 88,
+  "opening": "Opening shot description (1 sentence of what viewer sees first)"
+}
+
+Rules:
+- Must be about food or cooking
+- Title must be specific and clickable
+- Hook must start with a pattern interrupt
+- viral score: 79-97 range${usedTitles}`;
+
+  let text = '';
+  if (provider === 'gemini' && geminiKey) {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        contents: [{parts: [{text: prompt}]}],
+        generationConfig: {temperature: 1.0, maxOutputTokens: 400}
+      })
+    });
+    if (!res.ok) throw new Error('Gemini ' + res.status);
+    const data = await res.json();
+    text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  } else if (provider === 'openai' && openaiKey) {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + openaiKey},
+      body: JSON.stringify({model: 'gpt-4o-mini', messages: [{role: 'user', content: prompt}], temperature: 1.0, max_tokens: 400})
+    });
+    if (!res.ok) throw new Error('OpenAI ' + res.status);
+    const data = await res.json();
+    text = data.choices?.[0]?.message?.content || '';
+  }
+
+  const clean = text.replace(/```json|```/g, '').trim();
+  const idea = JSON.parse(clean);
+  if (!idea.title || !idea.hook) throw new Error('Bad response');
+  
+  // Track seen titles to avoid repeats
+  _seenDiceTitles.add(idea.title);
+  if (_seenDiceTitles.size > 50) {
+    const first = _seenDiceTitles.values().next().value;
+    _seenDiceTitles.delete(first);
+  }
+  
+  return idea;
+}
+
+function renderDiceResult(idea) {
+  const viralColor = idea.viral >= 92 ? '#34D399' : idea.viral >= 86 ? '#FCD34D' : '#FB923C';
+  const viralLabel = idea.viral >= 92 ? '🔥 Viral Potential' : idea.viral >= 86 ? '⚡ Strong Pick' : '✅ Solid Idea';
+
+  document.getElementById('result-title').textContent = idea.title;
+  document.getElementById('result-hook').textContent = '"' + idea.hook + '"';
+  document.getElementById('result-desc').textContent = idea.desc;
+  document.getElementById('result-pacing').textContent = idea.pacing;
+  document.getElementById('result-format').textContent = idea.format;
+  document.getElementById('result-hookstyle').textContent = idea.hookstyle;
+  document.getElementById('result-opening').textContent = idea.opening;
+  document.getElementById('result-viral').innerHTML = `<span style="color:${viralColor};">${idea.viral}/100</span> <span class="text-slate-500 font-normal text-xs">${viralLabel}</span>`;
+
+  // Category badge
+  const catMap = { recipes:'badge-amber', hacks:'badge-violet', challenges:'badge-orange', reviews:'badge-pink', budget:'badge-green', global:'badge-pink' };
+  const catEmoji = { recipes:'📖', hacks:'⚡', challenges:'🏆', reviews:'⭐', budget:'💸', global:'🌍' };
+  let badgeHTML = '';
+  for (const [cat, ideas] of Object.entries(DICE_IDEAS)) {
+    if (ideas.some(i => i.title === idea.title)) {
+      badgeHTML += `<span class="badge ${catMap[cat]}">${catEmoji[cat]} ${cat.charAt(0).toUpperCase()+cat.slice(1)}</span>`;
+      break;
+    }
+  }
+  badgeHTML += `<span class="badge badge-orange">🎲 Dice Roll</span>`;
+  document.getElementById('result-badges').innerHTML = badgeHTML;
+
+  const card = document.getElementById('dice-result-card');
+  card.classList.remove('dice-result-anim');
+  void card.offsetWidth;
+  card.classList.add('dice-result-anim');
+
+  document.getElementById('dice-result').classList.remove('hidden');
+  document.getElementById('dice-result').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function saveDiceIdea() {
+  if (!currentDiceIdea) return;
+  const entry = {
+    id: Date.now(),
+    type: 'idea',
+    title: currentDiceIdea.title,
+    content: `[HOOK]\n"${currentDiceIdea.hook}"\n\n[DESCRIPTION]\n${currentDiceIdea.desc}\n\n[FORMAT]\n${currentDiceIdea.format}\n\n[HOOK STYLE]\n${currentDiceIdea.hookstyle}\n\n[OPENING SHOT]\n${currentDiceIdea.opening}\n\n[PACING]\n${currentDiceIdea.pacing}\n\n[VIRAL SCORE]\n${currentDiceIdea.viral}/100`,
+    framework: currentDiceIdea.format,
+    created: new Date().toISOString(),
+    wordCount: currentDiceIdea.hook.split(' ').length,
+  };
+  const lib = getLibrary();
+  lib.unshift(entry);
+  saveLibrary(lib);
+  showToast('✓ Idea saved to Library');
+}
+
+function sendDiceToGenerator() {
+  if (!currentDiceIdea) return;
+  document.getElementById('niche-input').value = currentDiceIdea.title;
+  document.getElementById('audience-input').value = '';
+  switchTab('generate');
+  showToast('Idea loaded — hit Generate for hooks!');
+}
+
+function sendDiceToScript() {
+  if (!currentDiceIdea) return;
+  document.getElementById('script-title').value = currentDiceIdea.title;
+  document.getElementById('script-textarea').value = `HOOK:\n"${currentDiceIdea.hook}"\n\n[Write your script here...]\n\n`;
+  updateScriptMetrics();
+  switchTab('script');
+  showToast('Idea loaded into Script Studio');
+}
+
+function copyDiceIdea() {
+  if (!currentDiceIdea) return;
+  const text = `${currentDiceIdea.title}\n\nHOOK: "${currentDiceIdea.hook}"\n\n${currentDiceIdea.desc}\n\nOpening Shot: ${currentDiceIdea.opening}`;
+  navigator.clipboard.writeText(text).then(() => showToast('✓ Idea copied'));
+}
+
+function useQuickIdea(el) {
+  const ideaText = el.dataset.idea;
+  document.getElementById('niche-input').value = ideaText;
+  switchTab('generate');
+  showToast('Topic loaded — customize and generate!');
+}
+
+// ─────────────────────────────────────────────
+// FOOD HOOKS & FRAMEWORKS
+// ─────────────────────────────────────────────
+const FOOD_PRO_TIPS = [
+  "Film your cooking with a phone stand directly overhead (bird's eye) for maximum visual appeal — it's the most reposted food angle on Shorts.",
+  "The 'sizzle sound' of food hitting a hot pan is one of the most effective scroll-stoppers. Lead with audio when you can.",
+  "ASMR food content outperforms talking-head food content by 35% on average. Let the cooking sounds speak first.",
+  "Show the final dish in the FIRST frame — even blurred or partially hidden. Curiosity gap drives full watch-through.",
+  "Recipe Shorts with text overlays get 2x more saves than those without. Viewers save to cook later.",
+  "The 'budget' or '$X for X meals' frame in your title gets significantly more shares — people tag friends who are broke.",
+  "Film in natural light whenever possible. Food lit by a window looks 3x more appetizing than artificial kitchen lighting.",
+  "Always taste your food on camera. An authentic reaction to your own cooking (good OR bad) builds instant trust.",
+  "Batch-film 5-7 recipe Shorts in one cooking session. Wear a different apron for each one.",
+  "Add a recipe card as the last frame — viewers screenshot it. This creates a free engagement metric.",
+  "The 'mistake reveal' format performs extremely well: show a failed attempt, then the fix. People love learning from failure.",
+  "Use a rubber spatula to scrape bowls for ASMR satisfaction. Small visual moments like this add production quality.",
+];
+
+const FOOD_FALLBACK = {
+  'cheap-vs-expensive': (niche) => [
+    { visual:`SPLIT SCREEN: Cheap version of ${niche} on left (price tag visible, under $5). Gourmet/expensive version on right ($30+). ZOOM into each. Blind taste test. Dramatic winner reveal with creator's genuine reaction.`, audio:`"I spent $4 on ${niche} vs $32 on ${niche}. The one that won will make you question everything you buy at the store."`, hook_type:'Price Shock', framework:'Cheap vs Expensive', retention_score:93 },
+    { visual:`Creator holds budget ${niche} ingredients in one hand, premium in the other. CUTS through the cooking of each side-by-side. Final plate comparison close-up.`, audio:`"Stop spending $25 on ${niche}. The $5 version you can make at home is — and I mean this — actually better."`, hook_type:'Money-Saving', framework:'Cheap vs Expensive', retention_score:89 },
+    { visual:`Grocery store B-roll. Hands reaching for expensive ${niche}. SMASH CUT to dollar store version. Side-by-side result. Creator's verdict directly to camera.`, audio:`"Every food snob told me to spend more on ${niche}. I ran the test. Here are the actual results — no opinions, just taste."`, hook_type:'Test Results', framework:'Cheap vs Expensive', retention_score:86 },
+  ],
+  'market-vs-homemade': (niche) => [
+    { visual:`Takeout container of ${niche} on left. Identical homemade version on right. Ingredient cost label shown. Side-by-side bite comparison with reaction.`, audio:`"I paid $18 for ${niche} from my favourite restaurant. I just made the same thing at home for $3.50. Let me show you how."`, hook_type:'Cost Reveal', framework:'Takeout vs Homemade', retention_score:92 },
+    { visual:`Creator receives delivery bag. Opens container. Looks at camera with 'I can do better' energy. CUT to kitchen. Making it from scratch. Reveal plate.`, audio:`"This is what $18 of takeout ${niche} looks like. This is what I made at home for $3. Same dish. One of them slaps harder."`, hook_type:'Duel', framework:'Takeout vs Homemade', retention_score:88 },
+    { visual:`Ingredient label of store-bought ${niche} shown — highlighting additives. Homemade ingredients line up (all recognizable). Cooking montage. Comparison taste.`, audio:`"Your store-bought ${niche} has 22 ingredients you can't pronounce. Mine has 6. Let me teach you to make it in 8 minutes."`, hook_type:'Clean Ingredients', framework:'Takeout vs Homemade', retention_score:85 },
+  ],
+  'mythbusting': (niche) => [
+    { visual:`Bold text: "MYTH: [Common ${niche} rule]" slams onto screen. Creator shakes head. Test setup shown. Dramatic result that contradicts the myth. Creator triumphant.`, audio:`"Every cooking show told me this rule about ${niche}. I tested it. They were wrong. Here's what actually works."`, hook_type:'Authority Myth Bust', framework:'Cooking Myth Busted', retention_score:94 },
+    { visual:`Creator holds up ${niche} confidently. SMASH CUT to close-up of 'the wrong way' everyone does it. Then the correct method shown. Results compared.`, audio:`"Stop doing this to your ${niche}. I know everyone says this is right. It is not right. Here's the proof."`, hook_type:'Common Mistake Fix', framework:'Cooking Myth Busted', retention_score:90 },
+    { visual:`Side-by-side experiment: ${niche} made the 'internet way' vs the correct technique. Both results shown. Numbers/measurements shown on screen.`, audio:`"I followed every online tip about ${niche} for a month. I tested them properly. 3 of them are complete myths. Here they are."`, hook_type:'Test Series', framework:'Cooking Myth Busted', retention_score:87 },
+  ],
+  '30-second-challenge': (niche) => [
+    { visual:`Big timer: 0:60 on screen. Creator starts cooking ${niche}. Rapid cuts. Timer counting down is shown every 15 seconds. Final dish revealed as timer hits 0:00.`, audio:`"60 seconds. Complete ${niche} from scratch. Go." [sound effects only, intense kitchen sounds, clock ticking]`, hook_type:'Pure Urgency', framework:'60-Second Recipe', retention_score:95 },
+    { visual:`Creator sets phone timer visibly. States the challenge. Races through prep, cook, and plate. End-card shows result with timer shown.`, audio:`"My friend bet me $20 I couldn't make ${niche} in under a minute. She didn't know I've been practicing this for 3 weeks."`, hook_type:'Stakes & Bet', framework:'60-Second Recipe', retention_score:91 },
+    { visual:`Text overlay: "RECIPE SPEEDRUN — ${niche}". Timer appears. Ingredient list visible as each is used. Final result with chef's kiss.`, audio:`"Pro chefs say ${niche} takes 45 minutes minimum. I do it in 60 seconds. Here's the exact shortcut method."`, hook_type:'Expert vs Home Cook', framework:'60-Second Recipe', retention_score:88 },
+  ],
+  'before-after': (niche) => [
+    { visual:`BEFORE: Sad, failed, or raw version of ${niche}. CUT to AFTER: Perfect, golden, plated version. Slow reveal with macro close-up details. Creator's satisfaction.`, audio:`"This was my ${niche} before I learned the technique. [pause] ...and this is it now. Same recipe. One thing changed."`, hook_type:'Transformation Reveal', framework:'Disaster to Delicious', retention_score:91 },
+    { visual:`Creator looking frustrated with a failed ${niche} attempt. Jump cut after 'fixing it'. New result shown. Emotion of relief and pride is genuine.`, audio:`"I made ${niche} every day for 10 days to get it right. Day 1 looked like a crime. Day 10 looked like this."`, hook_type:'Journey Arc', framework:'Disaster to Delicious', retention_score:87 },
+    { visual:`Split screen static comparison as thumbnail-style frame first. Then breakdown of exactly what changed between versions.`, audio:`"Left: first attempt at ${niche}, 3 months ago. Right: last night. Here are the 3 specific things I fixed."`, hook_type:'Progress Breakdown', framework:'Disaster to Delicious', retention_score:84 },
+  ],
+  'rookie-vs-pro': (niche) => [
+    { visual:`SPLIT SCREEN: Left (ROOKIE label) — overcomplicated ${niche} method, mess, confusion. Right (CHEF label) — minimal, precise, effortless.`, audio:`"Home cook vs trained chef making ${niche}. The difference isn't talent, equipment, or time. It's this one thing."`, hook_type:'Skill Gap', framework:'Home Cook vs Chef', retention_score:92 },
+    { visual:`Creator plays both roles. Costume/position change between cuts. Exaggerated rookie errors. Chef's calm efficiency. Final side-by-side tasting.`, audio:`"Me making ${niche} before culinary school: total chaos. Me making it after learning one technique: completely different."`, hook_type:'Before/After Self', framework:'Home Cook vs Chef', retention_score:88 },
+    { visual:`Street interview: random person attempts ${niche} step (with permission). Chef demonstrates same step. Comparison of results.`, audio:`"I asked 8 home cooks how they make ${niche}. They were all making the same mistake. Are you making it too?"`, hook_type:'Audience Mirror', framework:'Home Cook vs Chef', retention_score:85 },
+  ],
+  'top3-secrets': (niche) => [
+    { visual:`Blurred list: #1, #2, #3 hidden. Reveal in reverse order (#3 first, builds to #1). Proof shown for each. Chef's exasperated 'why didn't I know this' energy.`, audio:`"3 things professional chefs know about ${niche} that they do not teach in cooking shows. I'm giving them away. #3 first:"`, hook_type:'Insider Reveal', framework:"Pro Chef Secrets", retention_score:91 },
+    { visual:`Creator holds up fingers for each secret. Short demo per technique. Zoom on the most visually striking moment per tip.`, audio:`"I asked a Michelin-star chef to tell me the 3 secrets about ${niche} that home cooks miss. He actually told me."`, hook_type:'Authority Source', framework:"Pro Chef Secrets", retention_score:88 },
+    { visual:`Text-based list appearing one by one with visual proof clips. Final bonus tip added as surprise.`, audio:`"If your ${niche} never tastes as good as a restaurant's — it's because of these 3 things. No one will tell you this for free."`, hook_type:'Exclusivity', framework:"Pro Chef Secrets", retention_score:86 },
+  ],
+  'tutorial-speedrun': (niche) => [
+    { visual:`Step counter visible on screen. Each numbered step shown in rapid fire 2-3 second clips. Final result close-up with timing shown.`, audio:`"${niche} in 8 steps. I'm not stopping. I'm not explaining. Just watch the technique and pause if you need to."`, hook_type:'No-Fluff Tutorial', framework:'Recipe Speedrun', retention_score:90 },
+    { visual:`Creator works with metronomic efficiency. Each ingredient label appears as it's used. Progress bar shows % complete.`, audio:`"Full ${niche} from raw ingredients. I'll show you everything. I'll skip the boring parts. Total time: watch the counter."`, hook_type:'Efficiency Porn', framework:'Recipe Speedrun', retention_score:87 },
+    { visual:`Overhead shot throughout. Ingredients enter from the sides. Progress is satisfying to watch from above.`, audio:`"This is the fastest way to make ${niche} without cutting any corners on flavour. Bird's eye view. Go."`, hook_type:"Bird's Eye Speedrun", framework:'Recipe Speedrun', retention_score:84 },
+  ],
+  'hot-take': (niche) => [
+    { visual:`Creator stares at camera, very close, confident. Bold text overlay with hot take about ${niche}. Quick proof clips. Creator doubles down.`, audio:`"Unpopular opinion: you don't need to [common ${niche} step]. I haven't done it in 2 years. My ${niche} is better for it."`, hook_type:'Contrarian Technique', framework:'Food Hot Take', retention_score:93 },
+    { visual:`Comment screenshot shown: 'you're wrong about ${niche}.' Creator's reaction. Point-by-point rebuttal with cooking evidence.`, audio:`"Someone commented that my ${niche} method is wrong. I made it their way. Then my way. The numbers don't lie."`, hook_type:'Comment Rebuttal', framework:'Food Hot Take', retention_score:89 },
+    { visual:`Creator whispers conspiratorially. Quick cuts to backing evidence. Text highlights the key contrarian point. Comments invited explicitly.`, audio:`"I know this will upset people who love ${niche} — but someone needs to say it. [leans in] Here is the actual truth."`, hook_type:'Whisper Controversy', framework:'Food Hot Take', retention_score:86 },
+  ],
+  'taste-test': (niche) => [
+    { visual:`Multiple versions of ${niche} lined up. Creator blindfolded or looking away. Numbered samples. Genuine reactions. Reveal which is which.`, audio:`"Blind taste test: can I actually tell the difference between a $5 and $50 ${niche}? I genuinely didn't know before this."`, hook_type:'Blind Test Drama', framework:'Blind Taste Test', retention_score:91 },
+    { visual:`Friends or family as taste testers. Their unfiltered reactions shown. Scoreboard tallied. Creator reveals the winner.`, audio:`"I got 5 people to taste test ${niche} without telling them the price. Their reactions are not what I expected at all."`, hook_type:'People Test', framework:'Blind Taste Test', retention_score:88 },
+    { visual:`Side-by-side bites taken simultaneously. Reaction zoom-in. Score cards shown. Dramatic pause before winner is announced.`, audio:`"I made the exact same ${niche} with one different ingredient. My partner couldn't tell. Then they could. Then they couldn't again."`, hook_type:'Ingredient Swap', framework:'Blind Taste Test', retention_score:85 },
+  ],
+  'food-hack': (niche) => [
+    { visual:`Creator demonstrates the old, painful way of doing a ${niche} task. SMASH CUT to the hack. Side-by-side time/effort comparison.`, audio:`"There is a faster way to [${niche} task] that every home cook needs to know. I'm embarrassed I found this so late."`, hook_type:'Embarrassed Discovery', framework:'Game-Changing Hack', retention_score:90 },
+    { visual:`Hack shown first — no context. Viewers must watch to understand why. Result reveal at end explains the 'why'.`, audio:`"This looks weird. I know. But just watch what happens to the ${niche} after 30 seconds. I'll explain at the end."`, hook_type:'Curious Opening', framework:'Game-Changing Hack', retention_score:93 },
+    { visual:`Side-by-side: without hack vs with hack. Timer showing time difference. Final quality comparison close-up.`, audio:`"5 seconds vs 3 minutes, same result with ${niche}. The people who know this hack are not sharing it. Until now."`, hook_type:'Time-Saver', framework:'Game-Changing Hack', retention_score:87 },
+  ],
+  'asmr-cook': (niche) => [
+    { visual:`Extreme close-ups throughout. No talking. All natural cooking sounds amplified. Ingredients handled slowly and deliberately. Final plating in silence.`, audio:`[No voiceover — only the sounds of: knife on board, sizzle in pan, liquid poured, crust cracked] `, hook_type:'Pure ASMR', framework:'ASMR Cooking POV', retention_score:85 },
+    { visual:`First-person POV of cooking ${niche}. Hands visible throughout. Camera follows naturally. Very gentle, deliberate movements.`, audio:`[Soft whispered narration, barely audible] "First, the [ingredient]... then we just... let it rest for a moment..." [long pauses between steps]`, hook_type:'Whisper POV', framework:'ASMR Cooking POV', retention_score:82 },
+    { visual:`Focus on the most satisfying moments: crust being cut, sauce being poured, cheese being stretched, crisp being snapped.`, audio:`[Zero words — just the crack of the crust, the pull of the cheese, the sizzle hitting the cast iron] `, hook_type:'Satisfying Moments', framework:'ASMR Cooking POV', retention_score:88 },
+  ],
+};
+
+function getGenericFoodHooks(niche, format) {
+  return [
+    { visual:`Open with a striking close-up of the finished ${niche} — steam, gloss, or texture visible. PULL BACK to reveal creator. Quick cooking montage follows.`, audio:`"I've been making ${niche} the wrong way for years. This is how you actually do it right."`, hook_type:'Discovery Hook', framework:format, retention_score:84 },
+    { visual:`Creator starts mid-cook with ${niche} — no intro, straight into the action. Text overlay appears: key technique name. Result shown at 45-second mark.`, audio:`"If your ${niche} doesn't taste like a restaurant's, it's because of this one step nobody teaches you."`, hook_type:'Technique Reveal', framework:format, retention_score:81 },
+    { visual:`Ingredients for ${niche} lined up perfectly. Each one picked up and placed in pan in satisfying sequence. Final dish shown overhead.`, audio:`"${niche} done right. 6 ingredients. 8 minutes. I'll never order it again."`, hook_type:'Simplicity Hook', framework:format, retention_score:79 },
+  ];
+}
+
+// ─────────────────────────────────────────────
+// SCRIPT TEMPLATES
+// ─────────────────────────────────────────────
+const SCRIPT_TEMPLATES = {
+  recipe: `HOOK (first 3 seconds):
+"[Bold claim or question about your dish]"
+
+INTRO (5 seconds):
+"Here's everything you need: [list 4-6 ingredients quickly]"
+
+PROCESS (30-40 seconds):
+Step 1: [First action — make it visual]
+Step 2: [Key technique — this is where you add value]
+Step 3: [The moment it comes together]
+Step 4: [Final step — plating or finishing touch]
+
+RESULT + CTA (10 seconds):
+[Show the finished dish close-up]
+"That's it. Comment if you want more recipes like this."`,
+
+  hack: `HOOK (first 3 seconds):
+"[State the hack boldly — don't explain yet, just claim]"
+
+PROBLEM (8 seconds):
+"Most people [common mistake or pain point about the task]."
+
+HACK REVEAL (30 seconds):
+"Here's the fix: [demonstrate the hack clearly and slowly]"
+[Show before and after if possible]
+
+PROOF (10 seconds):
+"See the difference? [Point out what changed]"
+
+CTA (5 seconds):
+"Save this so you remember it next time."`,
+
+  'taste-test': `HOOK (first 3 seconds):
+"[Set up the test — what you're comparing and why it matters]"
+
+SETUP (8 seconds):
+"I got [number] versions of [food]. Same category. Very different [price/quality/origin]."
+
+THE TEST (35 seconds):
+Sample 1: [Reaction — genuine, don't oversell]
+Sample 2: [Reaction — honest comparison note]
+Sample 3: [Reaction — start teasing the winner]
+
+VERDICT (10 seconds):
+"The winner is [REVEAL]. And it's not even close."
+
+CTA:
+"Tell me which one you thought would win."`,
+
+  budget: `HOOK (first 3 seconds):
+"[State the budget and what it needs to cover — specific numbers]"
+
+CHALLENGE (8 seconds):
+"This is everything I bought for $[amount]. Here's what I made."
+
+COOKING MONTAGE (35 seconds):
+Meal 1: [Quick reveal + cost breakdown]
+Meal 2: [Quick reveal + running total]
+Meal 3: [Quick reveal + final total shown]
+
+VERDICT (10 seconds):
+"Total cost: $[X]. Total meals: [Y]. Honestly, [verdict]."
+
+CTA:
+"Drop your best budget meal in the comments."`,
+
+  challenge: `HOOK (first 3 seconds):
+"[State the challenge rule immediately — no buildup]"
+
+RULES (5 seconds):
+"The constraint: [specific, clear rule]. Starting now."
+
+ATTEMPT (40 seconds):
+[Document the attempt — show obstacles and problem-solving]
+[Include one moment where it almost goes wrong]
+[The key creative decision that makes it work]
+
+RESULT (10 seconds):
+[Show finished result — let the visual speak]
+"[Honest one-line verdict on how it went]"
+
+CTA:
+"Would you try this challenge? Comment below."`,
+};
+
+function applyTemplate(type) {
+  const tmpl = SCRIPT_TEMPLATES[type];
+  if (!tmpl) return;
+  const ta = document.getElementById('script-textarea');
+  if (ta.value.trim() && !confirm('Replace current script with template?')) return;
+  ta.value = tmpl;
+  updateScriptMetrics();
+  showToast(`✓ ${type.charAt(0).toUpperCase()+type.slice(1)} template applied`);
+}
+
+// ─────────────────────────────────────────────
+// GENERATE HOOKS
+// ─────────────────────────────────────────────
+async function generateIdeas() {
+  const niche = document.getElementById('niche-input').value.trim();
+  const audience = document.getElementById('audience-input').value.trim();
+  let format = document.getElementById('format-select').value;
+
+  if (!niche) {
+    const inp = document.getElementById('niche-input');
+    inp.style.borderColor = '#EF4444';
+    inp.focus();
+    setTimeout(() => inp.style.borderColor = '', 1500);
+    showToast('⚠ Enter a food topic first');
+    return;
+  }
+
+  if (format === 'auto') {
+    const fmtKeys = Object.keys(FOOD_FALLBACK);
+    format = fmtKeys[Math.floor(Math.random() * fmtKeys.length)];
+  }
+
+  document.getElementById('generate-empty').classList.add('hidden');
+  document.getElementById('generate-results').classList.add('hidden');
+  document.getElementById('generate-loading').classList.remove('hidden');
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Cooking up hooks...';
+
+  try {
+    const provider = localStorage.getItem('ss_provider') || 'none';
+    const geminiKey = localStorage.getItem('ss_gemini_key') || '';
+    const openaiKey = localStorage.getItem('ss_openai_key') || '';
+    const tone = localStorage.getItem('ss_tone') || 'energetic';
+
+    let hooks = null;
+    if (provider === 'gemini' && geminiKey) hooks = await callGemini(niche, audience, format, tone, geminiKey);
+    else if (provider === 'openai' && openaiKey) hooks = await callOpenAI(niche, audience, format, tone, openaiKey);
+    if (!hooks) hooks = (FOOD_FALLBACK[format] ? FOOD_FALLBACK[format](niche, audience) : getGenericFoodHooks(niche, format));
+    renderHooks(hooks);
+  } catch(e) {
+    const hooks = FOOD_FALLBACK[format] ? FOOD_FALLBACK[format](niche, audience) : getGenericFoodHooks(niche, format);
+    renderHooks(hooks);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generate 3 Hook Variations';
+  document.getElementById('generate-loading').classList.add('hidden');
+}
+
+async function callGemini(niche, audience, format, tone, key) {
+  const prompt = buildFoodPrompt(niche, audience, format, tone);
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.9,maxOutputTokens:1400} })
+  });
+  if (!res.ok) throw new Error('Gemini ' + res.status);
+  const data = await res.json();
+  return parseHooksJSON(data.candidates?.[0]?.content?.parts?.[0]?.text || '');
+}
+
+async function callOpenAI(niche, audience, format, tone, key) {
+  const prompt = buildFoodPrompt(niche, audience, format, tone);
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+    body:JSON.stringify({ model:'gpt-4o-mini', messages:[{role:'user',content:prompt}], temperature:0.9, max_tokens:1400 })
+  });
+  if (!res.ok) throw new Error('OpenAI ' + res.status);
+  const data = await res.json();
+  return parseHooksJSON(data.choices?.[0]?.message?.content || '');
+}
+
+function buildFoodPrompt(niche, audience, format, tone) {
+  const aud = audience ? ` for ${audience}` : '';
+  return `You are an expert food content strategist specializing in viral YouTube Shorts and TikTok food videos. Generate exactly 3 high-retention hook variations for the food/cooking topic: "${niche}"${aud}.
+
+Format: ${format}
+Tone: ${tone}
+
+Respond ONLY with a valid JSON array, no markdown, no code fences:
+[
+  {
+    "visual": "Specific 2-sentence visual direction a creator can follow immediately — camera angles, food appearance, movement, text overlays",
+    "audio": "The exact 1-2 sentence spoken hook script — must grab in the first 2 seconds",
+    "hook_type": "2-3 word hook category",
+    "framework": "${format}",
+    "retention_score": 88
+  }
+]
+
+Rules:
+- All content must be food/cooking-specific and immediately actionable
+- Visual descriptions must describe what the FOOD looks like, how it moves, sounds
+- Audio hooks must start with a pattern interrupt (number, bold claim, question, mid-sentence)
+- Each of the 3 must use a DIFFERENT hook mechanism
+- retention_score: 79-96 range based on viral food content patterns
+- Keep each field concise — visual under 50 words, audio under 25 words`;
+}
+
+function parseHooksJSON(text) {
+  try {
+    const clean = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    if (Array.isArray(parsed) && parsed.length) return parsed.slice(0,3);
+  } catch(e) {}
+  return null;
+}
+
+function renderHooks(hooks) {
+  const container = document.getElementById('hooks-container');
+  container.innerHTML = '';
+  const scoreClass = ['badge-green','badge-violet','badge-amber'];
+  const icons = ['fa-bolt','fa-fire','fa-star'];
+
+  hooks.forEach((hook, i) => {
+    const score = hook.retention_score || (88 - i*3);
+    const div = document.createElement('div');
+    div.className = 'hook-card p-4';
+    div.style.animationDelay = (i * 80) + 'ms';
+    div.style.animation = 'slideUp .3s ease forwards';
+    div.style.opacity = '0';
+    div.innerHTML = `
+      <div class="flex items-start justify-between gap-2 mb-3">
+        <div class="flex flex-wrap gap-1.5">
+          <span class="badge ${scoreClass[i % 3]}"><i class="fa-solid ${icons[i%3]} mr-1 text-xs"></i>${escHtml(hook.hook_type||'Hook '+(i+1))}</span>
+          <span class="badge badge-orange">⚡ ${score}% retention</span>
+        </div>
+        <span class="text-xs text-slate-600 shrink-0">V${i+1}</span>
+      </div>
+      <div class="mb-3">
+        <div class="flex items-center gap-1.5 mb-1.5">
+          <i class="fa-solid fa-video text-xs" style="color:#A78BFA;"></i>
+          <span class="text-xs font-bold uppercase tracking-wider" style="color:#A78BFA;">Visual Direction</span>
+        </div>
+        <p class="text-sm text-slate-300 leading-relaxed">${escHtml(hook.visual)}</p>
+      </div>
+      <div class="mb-4">
+        <div class="flex items-center gap-1.5 mb-1.5">
+          <i class="fa-solid fa-microphone text-xs" style="color:#F472B6;"></i>
+          <span class="text-xs font-bold uppercase tracking-wider" style="color:#F472B6;">Audio Hook Script</span>
+        </div>
+        <p class="text-sm italic leading-relaxed" style="color:#FDE68A;">"${escHtml(hook.audio)}"</p>
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        <button onclick="cpHook(this,'${escAttr(hook.visual+'\\n\\n'+hook.audio)}')" class="btn-ghost px-3 py-1.5 rounded-xl text-xs flex items-center gap-1"><i class="fa-solid fa-copy text-xs"></i> Copy All</button>
+        <button onclick="cpHook(this,'${escAttr(hook.audio)}')" class="btn-ghost px-3 py-1.5 rounded-xl text-xs flex items-center gap-1"><i class="fa-solid fa-microphone text-xs"></i> Audio Only</button>
+        <button onclick="toScript('${escAttr(hook.audio)}')" class="btn-secondary px-3 py-1.5 rounded-xl text-xs flex items-center gap-1"><i class="fa-solid fa-arrow-right text-xs"></i> Use in Script</button>
+        <button onclick="saveHook(${i},'${escAttr(JSON.stringify(hook))}')" class="btn-secondary px-3 py-1.5 rounded-xl text-xs flex items-center gap-1"><i class="fa-solid fa-bookmark text-xs"></i> Save</button>
+      </div>`;
+    container.appendChild(div);
+  });
+
+  document.getElementById('pro-tip-text').textContent = FOOD_PRO_TIPS[Math.floor(Math.random()*FOOD_PRO_TIPS.length)];
+  document.getElementById('generate-results').classList.remove('hidden');
+}
+
+function cpHook(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i> Copied!';
+    btn.style.color = '#34D399';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
+  });
+}
+
+function toScript(audio) {
+  document.getElementById('hook-paste-input').value = audio;
+  switchTab('script');
+  showToast('Hook ready to prepend');
+}
+
+function saveHook(i, hookJson) {
+  try {
+    const hook = JSON.parse(hookJson);
+    const niche = document.getElementById('niche-input').value.trim() || 'Food Idea';
+    const entry = {
+      id: Date.now()+i, type:'idea',
+      title: `${hook.hook_type||'Hook'} — ${niche}`,
+      content: `[VISUAL]\n${hook.visual}\n\n[AUDIO HOOK]\n"${hook.audio}"`,
+      framework: hook.framework||'',
+      created: new Date().toISOString(),
+      wordCount: hook.audio.split(' ').length,
+    };
+    const lib = getLibrary(); lib.unshift(entry); saveLibrary(lib);
+    showToast('✓ Saved to Library');
+  } catch(e) { showToast('Error saving'); }
+}
+
+// ─────────────────────────────────────────────
+// SCRIPT STUDIO
+// ─────────────────────────────────────────────
+function updateScriptMetrics() {
+  const text = document.getElementById('script-textarea').value;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const secs = Math.round(words / 2.5);
+  const pct = Math.min((secs / 60) * 100, 100);
+  const isOver = secs > 60;
+
+  document.getElementById('word-count-label').textContent = words + ' word' + (words!==1?'s':'');
+  document.getElementById('duration-badge').textContent = '~'+secs+'s';
+  document.getElementById('over-badge').classList.toggle('hidden', !isOver);
+
+  const bar = document.getElementById('duration-bar');
+  bar.style.width = pct + '%';
+  bar.style.background = isOver ? 'linear-gradient(90deg,#EF4444,#F97316)' : 'linear-gradient(90deg,#8B5CF6,#EC4899)';
+
+  if (isOver) {
+    const ta = document.getElementById('script-textarea');
+    ta.classList.remove('warning-pulse');
+    void ta.offsetWidth;
+    ta.classList.add('warning-pulse');
+  }
+}
+
+function buildShotList() {
+  const text = document.getElementById('script-textarea').value.trim();
+  if (!text) { showToast('⚠ Write your script first'); return; }
+  const sentences = text.split(/(?<=[.!?])\s+|\n+/).filter(s => s.trim().length > 3);
+  if (!sentences.length) { showToast('⚠ Need at least one full sentence'); return; }
+
+  const rawSecs = parseInt(document.getElementById('duration-badge').textContent.replace(/[^0-9]/g,'')) || 30;
+  const rows = document.getElementById('shotlist-rows');
+  rows.innerHTML = '';
+
+  const foodVisuals = [
+    'CLOSE-UP: Food hero shot. Macro focus on texture/color/steam.',
+    'OVERHEAD: Bird\'s eye view of prep surface. Ingredients radiate outward.',
+    'MEDIUM SHOT: Creator speaks directly to camera, authentic energy.',
+    'HANDS POV: First-person cooking perspective. Hands active throughout.',
+    'SIZZLE CUT: Pan-level angle as ingredients hit hot oil. Steam billows.',
+    'INGREDIENT LINEUP: Each component laid out beautifully, labeled.',
+    'TECHNIQUE CLOSE-UP: Knife work / folding / whisking fills the frame.',
+    'REACTION SHOT: Creator tastes. Unscripted genuine facial expression.',
+    'FINAL PLATING: Hero shot of completed dish, overhead or 45° angle.',
+    'TEXT OVERLAY: Key tip, price, or time appears over the cooking.',
+  ];
+
+  sentences.forEach((sent, i) => {
+    const isVisual = i % 2 === 0;
+    const tIn = Math.round((i/sentences.length)*rawSecs);
+    const tOut = Math.round(((i+1)/sentences.length)*rawSecs);
+    const visual = foodVisuals[i % foodVisuals.length];
+
+    const row = document.createElement('div');
+    row.className = `p-3 rounded-xl ${isVisual ? 'shot-row-visual' : 'shot-row-audio'}`;
+    row.innerHTML = `
+      <div class="flex items-start gap-2.5">
+        <div class="flex flex-col items-center gap-0.5 shrink-0 pt-0.5">
+          <i class="fa-solid ${isVisual ? 'fa-video' : 'fa-microphone'} text-xs" style="color:${isVisual?'#A78BFA':'#F472B6'};"></i>
+          <span class="text-xs font-mono" style="color:#3A3A5A;">${String(i+1).padStart(2,'0')}</span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2 mb-1">
+            <span class="text-xs font-bold uppercase tracking-wider" style="color:${isVisual?'#A78BFA':'#F472B6'};">${isVisual?'Visual':'Audio'}</span>
+            <span class="text-xs font-mono text-slate-600">${tIn}s–${tOut}s</span>
+          </div>
+          <p class="text-sm text-slate-300 leading-relaxed">${isVisual ? `<span class="text-slate-500 italic">[${escHtml(visual)}]</span> — <span class="text-slate-400 italic">${escHtml(sent.trim())}</span>` : escHtml(sent.trim())}</p>
+        </div>
+      </div>`;
+    rows.appendChild(row);
+  });
+
+  document.getElementById('shotlist-container').classList.remove('hidden');
+  setTimeout(() => document.getElementById('shotlist-container').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+function copyShotList() {
+  const rows = document.querySelectorAll('#shotlist-rows > div');
+  let out = 'SHOT LIST\n' + '═'.repeat(40) + '\n\n';
+  rows.forEach((row, i) => {
+    const type = row.classList.contains('shot-row-visual') ? 'VISUAL' : 'AUDIO';
+    const p = row.querySelector('p');
+    out += `[${String(i+1).padStart(2,'0')}] ${type}\n${p ? p.innerText : ''}\n\n`;
+  });
+  navigator.clipboard.writeText(out).then(() => showToast('✓ Shot list copied'));
+}
+
+function copyScript() {
+  const t = document.getElementById('script-textarea').value;
+  if (!t.trim()) { showToast('⚠ Script is empty'); return; }
+  navigator.clipboard.writeText(t).then(() => showToast('✓ Script copied'));
+}
+
+function prependHook() {
+  const hook = document.getElementById('hook-paste-input').value.trim();
+  if (!hook) { showToast('⚠ Paste a hook first'); return; }
+  const ta = document.getElementById('script-textarea');
+  ta.value = hook + (ta.value ? '\n\n' + ta.value : '');
+  document.getElementById('hook-paste-input').value = '';
+  updateScriptMetrics();
+  showToast('✓ Hook added');
+}
+
+function saveToLibrary() {
+  const title = document.getElementById('script-title').value.trim() || 'Untitled Script';
+  const content = document.getElementById('script-textarea').value.trim();
+  if (!content) { showToast('⚠ Write your script first'); return; }
+  const entry = {
+    id: Date.now(), type:'script', title, content,
+    created: new Date().toISOString(),
+    wordCount: content.split(/\s+/).filter(Boolean).length,
+  };
+  const lib = getLibrary(); lib.unshift(entry); saveLibrary(lib);
+  showToast('✓ Script saved to Library');
+}
+
+// ─────────────────────────────────────────────
+// LIBRARY
+// ─────────────────────────────────────────────
+function getLibrary() { try { return JSON.parse(localStorage.getItem('ss_library')||'[]'); } catch(e){ return []; } }
+function saveLibrary(lib) { localStorage.setItem('ss_library', JSON.stringify(lib)); }
+
+let editingId = null;
+
+function renderLibrary() {
+  const lib = getLibrary();
+  const q = (document.getElementById('lib-search')?.value||'').toLowerCase();
+  const filtered = lib.filter(e => e.title.toLowerCase().includes(q) || e.content.toLowerCase().includes(q));
+
+  const scripts = lib.filter(e => e.type==='script').length;
+  const ideas = lib.filter(e => e.type==='idea').length;
+  document.getElementById('stat-total').textContent = lib.length;
+  document.getElementById('stat-scripts').textContent = scripts;
+  document.getElementById('stat-ideas').textContent = ideas;
+
+  const list = document.getElementById('library-list');
+  const empty = document.getElementById('library-empty');
+  list.innerHTML = '';
+
+  if (!filtered.length) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+
+  filtered.forEach(entry => {
+    const date = new Date(entry.created).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const wc = entry.wordCount || entry.content.split(/\s+/).filter(Boolean).length;
+    const preview = entry.content.substring(0,110) + (entry.content.length>110?'...':'');
+    const typeClass = entry.type==='script' ? 'badge-violet' : 'badge-orange';
+    const typeIcon = entry.type==='script' ? 'fa-scroll' : (entry.title.includes('Dice')||entry.title.includes('Roll') ? 'fa-dice' : 'fa-lightbulb');
+    const typeLabel = entry.type==='script' ? 'Script' : 'Idea';
+    const el = document.createElement('div');
+    el.className = 'lib-item p-4';
+    el.innerHTML = `
+      <div class="flex items-start justify-between gap-2 mb-2">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1.5 flex-wrap">
+            <span class="badge ${typeClass}"><i class="fa-solid ${typeIcon} mr-1 text-xs"></i>${typeLabel}</span>
+            ${entry.framework ? `<span class="badge" style="background:#ffffff06;color:#475569;border:1px solid #1E1E2E;font-size:10px;">${escHtml(entry.framework)}</span>` : ''}
+          </div>
+          <h3 class="text-sm font-bold text-white leading-snug">${escHtml(entry.title)}</h3>
+        </div>
+        <div class="flex gap-1 shrink-0">
+          <button onclick="editEntry(${entry.id})" class="w-7 h-7 flex items-center justify-center btn-ghost rounded-lg text-xs"><i class="fa-solid fa-pen text-xs"></i></button>
+          <button onclick="deleteEntry(${entry.id})" class="w-7 h-7 flex items-center justify-center btn-danger rounded-lg text-xs"><i class="fa-solid fa-trash text-xs"></i></button>
+        </div>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed mb-3">${escHtml(preview)}</p>
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-slate-600"><i class="fa-solid fa-calendar-alt mr-1"></i>${date}</span>
+          <span class="text-xs text-slate-600"><i class="fa-solid fa-align-left mr-1"></i>${wc}w</span>
+        </div>
+        <div class="flex gap-1.5">
+          <button onclick="loadToScript(${entry.id})" class="btn-secondary px-2.5 py-1.5 rounded-lg text-xs flex items-center gap-1"><i class="fa-solid fa-pen-to-square text-xs"></i> Open</button>
+          <button onclick="copyEntry(${entry.id})" class="btn-ghost px-2.5 py-1.5 rounded-lg text-xs"><i class="fa-solid fa-copy text-xs"></i></button>
+        </div>
+      </div>`;
+    list.appendChild(el);
+  });
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  saveLibrary(getLibrary().filter(e=>e.id!==id));
+  renderLibrary();
+  showToast('Deleted');
+}
+
+function copyEntry(id) {
+  const e = getLibrary().find(e=>e.id===id);
+  if (!e) return;
+  navigator.clipboard.writeText(e.title+'\n\n'+e.content).then(()=>showToast('✓ Copied'));
+}
+
+function loadToScript(id) {
+  const e = getLibrary().find(e=>e.id===id);
+  if (!e) return;
+  document.getElementById('script-title').value = e.title;
+  document.getElementById('script-textarea').value = e.content;
+  updateScriptMetrics();
+  switchTab('script');
+  showToast('✓ Loaded into Script Studio');
+}
+
+function editEntry(id) {
+  const e = getLibrary().find(e=>e.id===id);
+  if (!e) return;
+  editingId = id;
+  document.getElementById('edit-title').value = e.title;
+  document.getElementById('edit-content').value = e.content;
+  document.getElementById('edit-modal').classList.remove('hidden');
+}
+
+function closeEditModal() { document.getElementById('edit-modal').classList.add('hidden'); editingId=null; }
+
+function saveEdit() {
+  if (!editingId) return;
+  const lib = getLibrary();
+  const idx = lib.findIndex(e=>e.id===editingId);
+  if (idx===-1) return;
+  lib[idx].title = document.getElementById('edit-title').value.trim() || lib[idx].title;
+  lib[idx].content = document.getElementById('edit-content').value;
+  lib[idx].wordCount = lib[idx].content.split(/\s+/).filter(Boolean).length;
+  lib[idx].updated = new Date().toISOString();
+  saveLibrary(lib);
+  closeEditModal();
+  renderLibrary();
+  showToast('✓ Changes saved');
+}
+
+// ─────────────────────────────────────────────
+// EXPORT
+// ─────────────────────────────────────────────
+function exportJSON() {
+  const lib = getLibrary();
+  if (!lib.length) { showToast('⚠ Library is empty'); return; }
+  const blob = new Blob([JSON.stringify(lib,null,2)],{type:'application/json'});
+  dlBlob(blob,'shortspark-food-library.json');
+  showToast('✓ Exported as JSON');
+}
+
+function exportCSV() {
+  const lib = getLibrary();
+  if (!lib.length) { showToast('⚠ Library is empty'); return; }
+  const hdr = ['ID','Type','Title','Content','Framework','Words','Created'];
+  const rows = lib.map(e=>[e.id,e.type,csv(e.title),csv(e.content),csv(e.framework||''),e.wordCount||'',e.created||'']);
+  const blob = new Blob([[hdr.join(','),...rows.map(r=>r.join(','))].join('\n')],{type:'text/csv'});
+  dlBlob(blob,'shortspark-food-library.csv');
+  showToast('✓ Exported as CSV');
+}
+
+function csv(v){const s=String(v||'').replace(/"/g,'""');return`"${s}"`;}
+function dlBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+
+// ─────────────────────────────────────────────
+// SETTINGS
+// ─────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('ai-provider-select').value = localStorage.getItem('ss_provider')||'none';
+  document.getElementById('gemini-key-input').value = localStorage.getItem('ss_gemini_key')||'';
+  document.getElementById('openai-key-input').value = localStorage.getItem('ss_openai_key')||'';
+  document.getElementById('tone-select').value = localStorage.getItem('ss_tone')||'energetic';
+  toggleProviderFields();
+  document.getElementById('settings-modal').classList.remove('hidden');
+}
+function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+function toggleProviderFields() {
+  const v = document.getElementById('ai-provider-select').value;
+  document.getElementById('gemini-field').classList.toggle('hidden', v!=='gemini');
+  document.getElementById('openai-field').classList.toggle('hidden', v!=='openai');
+}
+function toggleVis(id) { const i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; }
+function saveSettings() {
+  localStorage.setItem('ss_provider', document.getElementById('ai-provider-select').value);
+  localStorage.setItem('ss_gemini_key', document.getElementById('gemini-key-input').value.trim());
+  localStorage.setItem('ss_openai_key', document.getElementById('openai-key-input').value.trim());
+  localStorage.setItem('ss_tone', document.getElementById('tone-select').value);
+  closeSettings();
+  updateAPIBadge();
+  showToast('✓ Settings saved');
+}
+function updateAPIBadge() {
+  const p=localStorage.getItem('ss_provider')||'none';
+  const gk=localStorage.getItem('ss_gemini_key')||'';
+  const ok=localStorage.getItem('ss_openai_key')||'';
+  const active=(p==='gemini'&&gk)||(p==='openai'&&ok);
+  document.getElementById('api-badge').classList.toggle('hidden',!active);
+}
+function clearLibrary() {
+  if (!confirm('Delete ALL saved entries? This cannot be undone.')) return;
+  localStorage.removeItem('ss_library');
+  closeSettings();
+  renderLibrary();
+  showToast('Library cleared');
+}
+
+// ─────────────────────────────────────────────
+// TAB NAVIGATION
+// ─────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const target = document.getElementById('panel-'+tab);
+  if (target) target.classList.add('active');
+
+  // Mobile tabs
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.remove('tab-active');
+    const pip=b.querySelector('.tab-pip');
+    if(pip) pip.style.opacity='0';
+    b.querySelectorAll('.tab-icon').forEach(i=>{
+      if(i.tagName==='I') i.style.color='#64748B';
+    });
+    const lbl=b.querySelector('.tab-label');
+    if(lbl) lbl.style.color='#64748B';
+  });
+  const mob = document.getElementById('mob-tab-'+tab);
+  if (mob) {
+    mob.classList.add('tab-active');
+    const pip=mob.querySelector('.tab-pip');
+    if(pip) pip.style.opacity='1';
+  }
+
+  // Desktop tabs
+  document.querySelectorAll('.desk-tab').forEach(b=>{
+    b.style.background='';
+    b.style.color='';
+  });
+  const desk = document.getElementById('desk-tab-'+tab);
+  if (desk) { desk.style.background='#F9731615'; desk.style.color='#FB923C'; }
+
+  if (tab==='library') renderLibrary();
+}
+
+// ─────────────────────────────────────────────
+// UTILITIES
+// ─────────────────────────────────────────────
+function escHtml(s) {
+  if(!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function escAttr(s) {
+  if(!s) return '';
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n').replace(/\r/g,'');
+}
+
+let _toastTimer=null;
+function showToast(msg) {
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  if(_toastTimer) clearTimeout(_toastTimer);
+  const t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  document.body.appendChild(t);
+  _toastTimer=setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2600);
+}
+
+// PWA handled by external manifest.json and sw.js
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(r => console.log('SW registered:', r.scope))
+      .catch(e => console.warn('SW failed:', e));
+  }
+  switchTab('dice');
+  updateAPIBadge();
+
+  document.getElementById('niche-input').addEventListener('keydown', e => {
+    if (e.key==='Enter') generateIdeas();
+  });
+
+  window.addEventListener('beforeunload', e => {
+    const c = document.getElementById('script-textarea')?.value?.trim();
+    if (c && c.length > 80) { e.preventDefault(); e.returnValue=''; }
+  });
+});
+</script>
+</body>
+</html>
