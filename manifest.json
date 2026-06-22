@@ -1,0 +1,37 @@
+{
+  "name": "ShortSpark Food",
+  "short_name": "ShortSpark",
+  "description": "Food & Cooking Shorts Ideation Workspace",
+  "start_url": "/shortspark/index.html",
+  "scope": "/shortspark/",
+  "display": "standalone",
+  "background_color": "#0D0D12",
+  "theme_color": "#F97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
